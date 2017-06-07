@@ -16,16 +16,30 @@ public class DirectoryTree {
 
     static {
         directoryTree.add(root);
-
+        directoryTree.add(new DirectoryNode("Documents",root));
+        directoryTree.add(new DirectoryNode("Images",root));
     }
 
     public void searchNode() {
 
     }
 
-    public void addNode() {
+    //新建子目录
+    public void addNode(DirectoryNode parentNode, String name) {
+        DirectoryNode childNode = new DirectoryNode(name, parentNode);
+        directoryTree.add(childNode);
+    }
+
+    //删除子目录
+    public void deleteNode() {
 
     }
 
+    public static DirectoryNode getRoot() {
+        return root;
+    }
 
+    public static ArrayList<DirectoryNode> getDirectoryTree() {
+        return directoryTree;
+    }
 }

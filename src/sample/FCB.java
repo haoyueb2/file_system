@@ -8,6 +8,8 @@ import java.util.Date;
  * Created by keke on 2017/6/2.
  */
 public class FCB {
+    //文件标识
+    private int fileID;
     //文件名称
     private String name;
     //文件大小
@@ -17,8 +19,7 @@ public class FCB {
     //文件类型
     private enum Type {
         folder, //文件夹
-        text,   //文本
-        image   //图像
+        file    //文件
     }
     private Type type;
     //权限

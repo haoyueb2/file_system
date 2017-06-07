@@ -8,16 +8,25 @@ import java.util.ArrayList;
 public class DirectoryNode {
     //名字
     private String name;
-    //父节点
+    //父目录
     private DirectoryNode parent;
-    //子节点
+    //子目录
     private ArrayList<DirectoryNode> child = new ArrayList<DirectoryNode>();
 
 
     public DirectoryNode(String name, DirectoryNode parent) {
         this.name = name;
         this.parent = parent;
+        if(parent != null) {
+            parent.addChild(this);
+        }
     }
+
+    //添加子目录
+    public void addChild(DirectoryNode childNode) {
+        child.add(childNode);
+    }
+    //删除子目录
 
 
     public String getName() {
@@ -43,4 +52,6 @@ public class DirectoryNode {
     public void setChild(ArrayList<DirectoryNode> child) {
         this.child = child;
     }
+
+
 }
