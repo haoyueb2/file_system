@@ -11,14 +11,21 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
-      <SplitPane layoutX="14.0" layoutY="54.0" prefHeight="434.0" prefWidth="222.0">
+      <SplitPane layoutX="7.0" layoutY="35.0" prefHeight="458.0" prefWidth="229.0">
          <items>
-            <TreeView fx:id="treeView" prefHeight="200.0" prefWidth="200.0" />
+            <TreeView fx:id="treeView" prefHeight="444.0" prefWidth="227.0" />
          </items>
       </SplitPane>
-      <SplitPane layoutX="249.0" layoutY="94.0" prefHeight="394.0" prefWidth="539.0">
+      <SplitPane layoutX="243.0" layoutY="68.0" prefHeight="425.0" prefWidth="549.0">
          <items>
-            <ListView prefHeight="200.0" prefWidth="200.0" />
+            <TableView prefHeight="200.0" prefWidth="200.0">
+              <columns>
+                <TableColumn prefWidth="25.0" text="" />
+                <TableColumn prefWidth="319.0" text="Name" />
+                <TableColumn prefWidth="75.0" text="Size" />
+                <TableColumn prefWidth="120.0" text="Modify" />
+              </columns>
+            </TableView>
          </items>
       </SplitPane>
       <MenuBar prefHeight="20.0" prefWidth="800.0">
@@ -44,7 +51,7 @@
             </Menu>
          </menus>
       </MenuBar>
-      <TextField layoutX="347.0" layoutY="54.0" prefHeight="27.0" prefWidth="441.0" />
-      <Label layoutX="249.0" layoutY="59.0" text="Current Path : " />
+      <TextField editable="false" layoutX="348.0" layoutY="35.0" prefHeight="27.0" prefWidth="444.0" />
+      <Label layoutX="249.0" layoutY="40.0" text="Current Path : " />
    </children>
 </Pane>

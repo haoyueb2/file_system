@@ -10,7 +10,6 @@ public class FileOperations {
         this.fcb = fcb;
     }
 
-
     //打开
     public void Open() {
 
@@ -38,6 +37,20 @@ public class FileOperations {
 
     //删除
     public void delete() {
+
+    }
+
+    //复制
+    public void copy() {
+
+    }
+
+    //剪切
+    public void cut() {
+
+    }
+    //粘贴
+    public void paste() {
 
     }
 
