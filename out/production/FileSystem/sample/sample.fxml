@@ -20,10 +20,10 @@
          <items>
             <TableView prefHeight="200.0" prefWidth="200.0">
               <columns>
-                <TableColumn prefWidth="25.0" text="" />
-                <TableColumn prefWidth="319.0" text="Name" />
-                <TableColumn prefWidth="75.0" text="Size" />
-                <TableColumn prefWidth="120.0" text="Modify" />
+                <TableColumn fx:id="columnChoice" editable="false" prefWidth="25.0" text="" />
+                <TableColumn fx:id="columnName" prefWidth="319.0" text="Name" />
+                <TableColumn fx:id="columnSize" prefWidth="75.0" text="Size" />
+                <TableColumn fx:id="columnTime" prefWidth="130.0" text="Modify Time" />
               </columns>
             </TableView>
          </items>

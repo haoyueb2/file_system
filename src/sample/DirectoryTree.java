@@ -17,8 +17,20 @@ public class DirectoryTree {
 
     static {
         directoryTree.add(root);
-        directoryTree.add(new FCB("Documents",FCB.Type.folder, root));
-        directoryTree.add(new FCB("Images",FCB.Type.folder, root));
+        FCB documentFCB = new FCB("Documents",FCB.Type.folder, root);
+        directoryTree.add(documentFCB);
+        FCB imagesFCB = new FCB("Images",FCB.Type.folder, root);
+        directoryTree.add(imagesFCB);
+
+        directoryTree.add(new FCB("haha.txt",FCB.Type.document, documentFCB));
+        directoryTree.add(new FCB("xixi.txt",FCB.Type.document, documentFCB));
+
+        FCB haha = new FCB("haha.png",FCB.Type.document, imagesFCB);
+        directoryTree.add(haha);
+
+//        System.out.println(haha.getSize());
+//        System.out.println(haha.getCreateTime());
+//        System.out.println(haha.getModifyTime());
     }
 
     public void searchNode() {

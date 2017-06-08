@@ -1,10 +1,13 @@
 package sample;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -12,6 +15,12 @@ public class Controller {
 
 
     @FXML private TreeView<String> treeView;
+
+    @FXML private TableView<FCB> tableView;
+    @FXML private TableColumn<FCB, CheckBox> columnChoice;
+    @FXML private TableColumn<FCB, String> columnName;
+    @FXML private TableColumn<FCB, Integer> columnSize;
+    @FXML private TableColumn<FCB, String> columnTime;
 
     //根目录图标
     private final Node rootIcon = new ImageView(
@@ -50,6 +59,29 @@ public class Controller {
 
         //--------------------------------Table View-------------------------------------
 
+
+//        columnChoice.setCellValueFactory(cellData -> cellData.getValue().);
+        columnName.setCellValueFactory(new PropertyValueFactory<FCB, String>("name"));
+//        columnSize.setCellValueFactory(new PropertyValueFactory<FCB, Integer>("size"));
+//        columnTime.setCellValueFactory(new PropertyValueFactory<FCB, String>("modifyTime"));
+
+
+//        columnSize.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getSize()));
+//        columnName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
+
+        ObservableList<FCB> list = FXCollections.observableArrayList();
+
+        for (int i = 0; i < directoryTree.getDirectoryTree().size(); i++) {
+            list.add(directoryTree.getDirectoryTree().get(i));
+        }
+//        for (int i = 0; i < list.size(); i++) {
+//            System.out.println(list.get(i).getName());
+//        }
+//        columnName.setCellValueFactory(cellData -> (new SimpleStringProperty(cellData.getValue().name)));
+
+
+        // FIXME: 2017/6/8 tableview加载不了数据, 可能因为Property?
+//        tableView.setItems(list);
 
     }
 }

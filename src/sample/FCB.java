@@ -12,7 +12,7 @@ public class FCB {
     //文件标识
     private int fileID;
     //文件名称
-    private String name;
+    public String name;
     //文件大小
     private int size;
 //    //限制大小
@@ -58,7 +58,8 @@ public class FCB {
     public FCB(String name, Type type, FCB parentNode) {
         this.name = name;
         this.type = type;
-
+        this.size = 0;
+        this.authority = Authority.writable;
         this.parent = parent;
         if(parent != null) {
             parent.addChild(this);
@@ -66,7 +67,7 @@ public class FCB {
 
         //获取当前日期
         this.createTime = simpleDateFormat.format(new Date());
-
+        this.modifyTime = simpleDateFormat.format(new Date());
     }
 
 
