@@ -1,7 +1,12 @@
 package sample;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.StringProperty;
+
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -11,12 +16,13 @@ public class FCB {
 
     //文件标识
     private int fileID;
+
     //文件名称
     public String name;
     //文件大小
     private int size;
 //    //限制大小
-//    private static final int MAX_SIZE = 64;
+//    private static final int MAX_SIZE = ;
 
     //文件类型
     public enum Type {
@@ -45,8 +51,8 @@ public class FCB {
     //索引结构
     private int [] indexTable = new int [11];
 
-    //文件操作
-    private FileOperations fileOperations = new FileOperations(this);
+//    //文件操作
+//    private FileOperations fileOperations = new FileOperations(this);
 
     //父目录
     private FCB parent;
@@ -60,7 +66,7 @@ public class FCB {
         this.type = type;
         this.size = 0;
         this.authority = Authority.writable;
-        this.parent = parent;
+        this.parent = parentNode;
         if(parent != null) {
             parent.addChild(this);
         }
@@ -68,6 +74,9 @@ public class FCB {
         //获取当前日期
         this.createTime = simpleDateFormat.format(new Date());
         this.modifyTime = simpleDateFormat.format(new Date());
+
+        //索引表全部项初始化为1
+        Arrays.fill(indexTable, -1);
     }
 
 
@@ -78,7 +87,7 @@ public class FCB {
     }
     //删除子目录
 
-    //-----------------------------get & set---------------------------------
+    //-----------------------------get & set---------------------------------------
     public String getName() {
         return name;
     }
@@ -167,11 +176,4 @@ public class FCB {
         this.indexTable = indexTable;
     }
 
-    public FileOperations getFileOperations() {
-        return fileOperations;
-    }
-
-    public void setFileOperations(FileOperations fileOperations) {
-        this.fileOperations = fileOperations;
-    }
 }

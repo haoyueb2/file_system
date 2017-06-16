@@ -33,20 +33,48 @@ public class DirectoryTree {
 //        System.out.println(haha.getModifyTime());
     }
 
-    public void searchNode() {
-
+    //一般新建只在当前目录下  还需考虑
+    public FCB searchFolder(String name) {
+        for (int i = 0; i < directoryTree.size(); i++) {
+            if(directoryTree.get(i).getName() == name) {
+                return directoryTree.get(i);
+            }
+        }
+        return null;
     }
 
     //新建子目录
-    public void addNode(FCB parentNode, String name) {
+    public void addFolder(FCB parentNode, String name) {
+        //todo:当前目录有重名的
+        //
         FCB childNode = new FCB(name, FCB.Type.folder, parentNode);
         directoryTree.add(childNode);
     }
 
     //删除子目录
-    public void deleteNode() {
-
+    public void deleteFolder(FCB fcb) {
+        if (directoryTree.contains(fcb)) {
+            while (fcb.getChild().size() != 0) {
+                deleteFolder(fcb.getChild().get(0));
+            }
+            directoryTree.remove(fcb);
+            fcb = null;
+        }
     }
+
+    //新建文件
+    public void addFile(FCB parent, String name) {
+        //todo:当前目录有重名的
+        FCB fcb = new FCB(name,FCB.Type.document, parent);
+        directoryTree.add(fcb);
+    }
+
+    //删除文件
+    public void deleteFile(FCB fcb) {
+        directoryTree.remove(fcb);
+        fcb = null;
+    }
+
 
     //获取路径
     public String getPath(FCB fcb) {
@@ -73,5 +101,11 @@ public class DirectoryTree {
 
     public static ArrayList<FCB> getDirectoryTree() {
         return directoryTree;
+    }
+
+    public static void main(String[] args) {
+        DirectoryTree d = new DirectoryTree();
+        d.addFolder(root,"music");
+
     }
 }

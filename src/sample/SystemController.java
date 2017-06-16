@@ -1,7 +1,9 @@
 package sample;
 
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,16 +13,19 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class Controller {
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+
+public class SystemController {
 
 
     @FXML private TreeView<String> treeView;
 
-    @FXML private TableView<FCB> tableView;
-    @FXML private TableColumn<FCB, CheckBox> columnChoice;
-    @FXML private TableColumn<FCB, String> columnName;
-    @FXML private TableColumn<FCB, Integer> columnSize;
-    @FXML private TableColumn<FCB, String> columnTime;
+    @FXML private TableView<FCBProperty> tableView;
+    @FXML private TableColumn<FCBProperty, CheckBox> columnChoice;
+    @FXML private TableColumn<FCBProperty, String> columnName;
+    @FXML private TableColumn<FCBProperty, String> columnSize;
+    @FXML private TableColumn<FCBProperty, String> columnTime;
 
     //根目录图标
     private final Node rootIcon = new ImageView(
@@ -61,27 +66,37 @@ public class Controller {
 
 
 //        columnChoice.setCellValueFactory(cellData -> cellData.getValue().);
-        columnName.setCellValueFactory(new PropertyValueFactory<FCB, String>("name"));
+//        columnName.setCellValueFactory(new PropertyValueFactory<FCB1, String>("name"));
 //        columnSize.setCellValueFactory(new PropertyValueFactory<FCB, Integer>("size"));
 //        columnTime.setCellValueFactory(new PropertyValueFactory<FCB, String>("modifyTime"));
 
+        columnName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+        columnSize.setCellValueFactory(cellData -> cellData.getValue().sizeProperty());
+        columnTime.setCellValueFactory(cellData -> cellData.getValue().timeProperty());
 
-//        columnSize.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getSize()));
-//        columnName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
 
-        ObservableList<FCB> list = FXCollections.observableArrayList();
 
-        for (int i = 0; i < directoryTree.getDirectoryTree().size(); i++) {
-            list.add(directoryTree.getDirectoryTree().get(i));
-        }
+
+        ObservableList<FCBProperty> list = FXCollections.observableArrayList();
+
+        list.add(new FCBProperty(new FCB("1", FCB.Type.document,null)));
+        list.add(new FCBProperty(new FCB("2", FCB.Type.document,null)));
+
+
+//        for (int i = 0; i < directoryTree.getDirectoryTree().size(); i++) {
+//            list.add(directoryTree.getDirectoryTree().get(i));
+//        }
 //        for (int i = 0; i < list.size(); i++) {
 //            System.out.println(list.get(i).getName());
 //        }
 //        columnName.setCellValueFactory(cellData -> (new SimpleStringProperty(cellData.getValue().name)));
 
 
-        // FIXME: 2017/6/8 tableview加载不了数据, 可能因为Property?
-//        tableView.setItems(list);
+        // FIXME: 2017/6/8 tableview加载不了数据, 可能因为Property? tableview fxid忘记设置了智障!
+        tableView.setItems(list);
 
     }
 }
+
+
+
