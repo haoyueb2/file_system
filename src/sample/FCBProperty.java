@@ -14,8 +14,11 @@ public class FCBProperty {
     private StringProperty size;
     private StringProperty time;
     private boolean choice;
+    public MyCheckBox checkbox = new MyCheckBox();
+    private FCB fcb;
 
     public FCBProperty(FCB fcb) {
+        this.fcb = fcb;
         this.name = new SimpleStringProperty(fcb.getName());
         this.size = new SimpleStringProperty(Integer.toString(fcb.getSize()));
         this.time = new SimpleStringProperty(fcb.getModifyTime());
@@ -64,5 +67,9 @@ public class FCBProperty {
 
     public void setChoice(boolean choice) {
         this.choice = choice;
+    }
+
+    public FCB getFcb() {
+        return fcb;
     }
 }

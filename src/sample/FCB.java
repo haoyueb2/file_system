@@ -172,8 +172,8 @@ public class FCB {
         return indexTable;
     }
 
-    public void setIndexTable(int[] indexTable) {
-        this.indexTable = indexTable;
+    public void setIndexTableI(int i, int x) {
+        this.indexTable[i] = x;
     }
 
 }

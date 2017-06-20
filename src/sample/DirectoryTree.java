@@ -21,6 +21,12 @@ public class DirectoryTree {
         directoryTree.add(documentFCB);
         FCB imagesFCB = new FCB("Images",FCB.Type.folder, root);
         directoryTree.add(imagesFCB);
+        FCB FCB1 = new FCB("1",FCB.Type.folder, documentFCB);
+        directoryTree.add(FCB1);
+        FCB FCB2 = new FCB("2",FCB.Type.folder, documentFCB);
+        directoryTree.add(FCB2);
+        FCB FCB3 = new FCB("3",FCB.Type.folder, imagesFCB);
+        directoryTree.add(FCB3);
 
         directoryTree.add(new FCB("haha.txt",FCB.Type.document, documentFCB));
         directoryTree.add(new FCB("xixi.txt",FCB.Type.document, documentFCB));
@@ -33,22 +39,16 @@ public class DirectoryTree {
 //        System.out.println(haha.getModifyTime());
     }
 
-    //一般新建只在当前目录下  还需考虑
-    public FCB searchFolder(String name) {
-        for (int i = 0; i < directoryTree.size(); i++) {
-            if(directoryTree.get(i).getName() == name) {
-                return directoryTree.get(i);
-            }
-        }
-        return null;
-    }
+
 
     //新建子目录
-    public void addFolder(FCB parentNode, String name) {
-        //todo:当前目录有重名的
+    public void addFolder(FCB parent, String name) {
+        //当前目录有重名的
         //
-        FCB childNode = new FCB(name, FCB.Type.folder, parentNode);
-        directoryTree.add(childNode);
+        if(!isSameName(parent,name)) {
+            FCB childNode = new FCB(name, FCB.Type.folder, parent);
+            directoryTree.add(childNode);
+        }
     }
 
     //删除子目录
@@ -64,15 +64,28 @@ public class DirectoryTree {
 
     //新建文件
     public void addFile(FCB parent, String name) {
-        //todo:当前目录有重名的
-        FCB fcb = new FCB(name,FCB.Type.document, parent);
-        directoryTree.add(fcb);
+        //当前目录有重名的
+        if(!isSameName(parent,name)) {
+            FCB fcb = new FCB(name, FCB.Type.document, parent);
+            directoryTree.add(fcb);
+        }
     }
 
     //删除文件
+    // TODO: 2017/6/20 block释放
     public void deleteFile(FCB fcb) {
         directoryTree.remove(fcb);
         fcb = null;
+    }
+
+    // TODO: 2017/6/20 重名文件和文件夹?
+    //当前目录下是否有重名
+    public boolean isSameName(FCB parent, String name) {
+        for (int i = 0; i < parent.getChild().size(); i++) {
+            if(parent.getChild().get(i).getName() == name)
+                return true;
+        }
+        return false;
     }
 
 
@@ -81,12 +94,10 @@ public class DirectoryTree {
         String path = root.getName();
         Stack<String> stack = new Stack<String>();
         FCB currentNode = fcb;
-        stack.push(currentNode.getName());
         while(currentNode != this.root) {
             stack.push(currentNode.getName());
             currentNode = currentNode.getParent();
         }
-        stack.push(root.getName());
         while(!stack.empty()) {
             path += " / " + stack.peek();
             stack.pop();
@@ -94,6 +105,25 @@ public class DirectoryTree {
         return path;
     }
 
+    //通过名字找FCB
+    public FCB getFCB(String name, String parent) {
+        for (FCB fcb : directoryTree
+             ) {
+            if(fcb.getName() == name && fcb.getParent().getName() == parent) {
+                return fcb;
+            }
+        }
+        return null;
+    }
+
+    public FCB getFCB(String name) {
+        for (int i = 0; i < directoryTree.size(); i++) {
+            if(directoryTree.get(i).getName() == name) {
+                return directoryTree.get(i);
+            }
+        }
+        return null;
+    }
 
     public static FCB getRoot() {
         return root;

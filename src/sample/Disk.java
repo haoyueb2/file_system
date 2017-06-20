@@ -3,26 +3,20 @@ package sample;
 import java.util.ArrayList;
 import java.util.Stack;
 
-import static sample.Disk.diskSize;
 
 /**
  * Created by keke on 2017/6/7.
  */
 public class Disk {
+    //每个磁盘块大小
+    public final int diskSize = 256;
 
     //磁盘块数量
-    public static final int diskBlockCount = 100;
-    //每个磁盘块大小
-    public static final int diskSize = 256;
+    public final int diskBlockCount = 100;
+
     //全部存储
-    public static ArrayList<DiskBlock> blockList = new ArrayList<DiskBlock>();
+    private  ArrayList<DiskBlock> blockList = new ArrayList<DiskBlock>();
 
-
-    static {
-        for (int i = 0; i < diskBlockCount; i++) {
-            blockList.add(new DiskBlock(i));
-        }
-    }
 
     //空块栈
     private Stack<Integer> freeDiskBlock = new Stack<Integer>();
@@ -31,6 +25,9 @@ public class Disk {
 
     public Disk() {
         this.initStack();
+        for (int i = 0; i < diskBlockCount; i++) {
+            blockList.add(new DiskBlock(i));
+        }
     }
 
     private void initStack() {
@@ -58,20 +55,37 @@ public class Disk {
         fullDiskBlock.clear();
     }
 
+    public ArrayList<DiskBlock> getBlockList() {
+        return blockList;
+    }
 
-}
+    public Stack<Integer> getFreeDiskBlock() {
+        return freeDiskBlock;
+    }
 
+    public Stack<Integer> getFullDiskBlock() {
+        return fullDiskBlock;
+    }
 
-class DiskBlock {
-    //编号
-    private int number;
-    //存储
-    private String [] content = new String[diskSize];
+    public int getDiskSize() {
+        return diskSize;
+    }
 
-    public DiskBlock(int n) {
-        this.number = n;
+    class DiskBlock {
+
+        //编号
+        private int number;
+        //存储
+        private String [] content = new String[diskSize];
+
+        public DiskBlock(int n) {
+            this.number = n;
+        }
     }
 }
+
+
+
 
 
 //    // 位示图

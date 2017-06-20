@@ -20,10 +20,10 @@
          <items>
             <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0">
               <columns>
-                  <TableColumn fx:id="columnRadio" prefWidth="25.0" />
-                <TableColumn fx:id="columnName" prefWidth="319.0" text="Name" />
+                  <TableColumn fx:id="columnChoice" prefWidth="27.0" />
+                <TableColumn fx:id="columnName" prefWidth="305.0" text="Name" />
                 <TableColumn fx:id="columnSize" prefWidth="75.0" text="Size" />
-                <TableColumn fx:id="columnTime" prefWidth="130.0" text="Modify Time" />
+                <TableColumn fx:id="columnTime" prefWidth="140.0" text="Modify Time" />
               </columns>
             </TableView>
          </items>
@@ -32,26 +32,35 @@
          <menus>
             <Menu mnemonicParsing="false" text="New">
                <items>
-                  <MenuItem mnemonicParsing="false" text="File" />
-                   <MenuItem mnemonicParsing="false" text="Folder" />
+                  <MenuItem fx:id="newFile" mnemonicParsing="false" onAction="#newFile" text="File" />
+                   <MenuItem fx:id="newFolder" mnemonicParsing="false" onAction="#newFolder" text="Folder" />
                </items>
             </Menu>
+             <Menu mnemonicParsing="false" text="Edit">
+                 <items>
+                     <MenuItem fx:id="open" mnemonicParsing="false" onAction="#open" text="Open" />
+                     <MenuItem fx:id="delete" mnemonicParsing="false" onAction="#delete" text="Delete" />
+                     <MenuItem fx:id="showDetails" mnemonicParsing="false" onAction="#showDetails" text="Show Details" />
+                 </items>
+             </Menu>
             <Menu mnemonicParsing="false" text="Sort">
                <items>
-                  <MenuItem mnemonicParsing="false" text="By Name" />
-                   <MenuItem mnemonicParsing="false" text="By Type" />
-                   <MenuItem mnemonicParsing="false" text="By Size" />
-                   <MenuItem mnemonicParsing="false" text="By Time Of Last Modification" />
+                  <MenuItem fx:id="sortByName" mnemonicParsing="false" onAction="#sortByName" text="By Name" />
+                   <MenuItem fx:id="sortByType" mnemonicParsing="false" onAction="#sortByType" text="By Type" />
+                   <MenuItem fx:id="sortBySize" mnemonicParsing="false" onAction="#sortBySize" text="By Size" />
+                   <MenuItem fx:id="sortByModifyTime" mnemonicParsing="false" onAction="#sortByModifyTime" text="By Modify Time" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Help">
                <items>
-                  <MenuItem mnemonicParsing="false" text="About" />
+                   <MenuItem mnemonicParsing="false" onAction="#help" text="Help" />
+                  <MenuItem mnemonicParsing="false" onAction="#about" text="About" />
                </items>
             </Menu>
          </menus>
       </MenuBar>
-      <TextField editable="false" layoutX="348.0" layoutY="35.0" prefHeight="27.0" prefWidth="444.0" />
+      <TextField fx:id="currentPathText" editable="false" layoutX="348.0" layoutY="35.0" prefHeight="27.0" prefWidth="444.0" />
       <Label layoutX="249.0" layoutY="40.0" text="Current Path : " />
+      <Button layoutX="236.0" layoutY="27.0" mnemonicParsing="false" onMouseClicked="#check" text="Button" />
    </children>
 </Pane>
