@@ -9,7 +9,7 @@ import java.util.Stack;
  */
 public class Disk {
     //每个磁盘块大小
-    public final int diskSize = 256;
+    private int diskSize = 256;
 
     //磁盘块数量
     public final int diskBlockCount = 100;
@@ -67,6 +67,9 @@ public class Disk {
         return fullDiskBlock;
     }
 
+//    public int getDiskSize() {
+//        return diskSize;
+//    }
     public int getDiskSize() {
         return diskSize;
     }
@@ -76,7 +79,7 @@ public class Disk {
         //编号
         private int number;
         //存储
-        private String [] content = new String[diskSize];
+        private String [] content = new String[getDiskSize()];
 
         public DiskBlock(int n) {
             this.number = n;

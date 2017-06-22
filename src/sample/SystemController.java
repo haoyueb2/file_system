@@ -1,6 +1,10 @@
 package sample;
 
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -26,14 +30,24 @@ public class SystemController {
     @FXML private TreeView<String> treeView;
 
     @FXML private TableView<FCBProperty> tableView;
-    @FXML private TableColumn<FCBProperty, CheckBox> columnChoice;
+    @FXML private TableColumn<FCBProperty, ImageView> columnChoice;
     @FXML private TableColumn<FCBProperty, String> columnName;
     @FXML private TableColumn<FCBProperty, String> columnSize;
     @FXML private TableColumn<FCBProperty, String> columnTime;
+    @FXML private TableColumn<FCBProperty, Button> columnOpen;
+    @FXML private TableColumn<FCBProperty, Button> columnDelete;
 
     @FXML private TextField currentPathText;
 
-    private ObservableList<FCBProperty> list = FXCollections.observableArrayList();
+    public static int selectCount = 0;
+
+    //编号
+    private int newFileNumber = 0;
+    private int newFOlderNumber = 0;
+
+    public static FCB currentFCB = null;
+
+    private static ObservableList<FCBProperty> list = FXCollections.observableArrayList();
 
     //根目录图标
     private final Node rootIcon = new ImageView(
@@ -41,16 +55,22 @@ public class SystemController {
     );
 
     //目录树
-    private DirectoryTree directoryTree = new DirectoryTree();
+    private static DirectoryTree directoryTree = new DirectoryTree();
+
 
     //当前目录
-    private FCB currentDirectory = directoryTree.getRoot();
+    public static FCB currentDirectory = directoryTree.getRoot();
 
-    private Disk disk;
+//    public static ObjectProperty<FCB> currentDirectory = new SimpleObjectProperty<>(directoryTree.getRoot());
 
-    private DiskManager diskManager = new DiskManager(disk, directoryTree);
+    private static Disk disk;
+
+    public static DiskManager diskManager = new DiskManager(disk, directoryTree);
 
     private Image folderImage = new Image(getClass().getResourceAsStream("/images/004-folder-5.png"));
+
+//    private Image file = new Image(getClass().getResourceAsStream("/images/file.png"));
+//    private Image folder = new Image(getClass().getResourceAsStream("/images/folders.png"));
 
     private void addTree(TreeItem<String> parent) {
         String parentName = parent.getValue();
@@ -108,7 +128,7 @@ public class SystemController {
         addTree(rootItem);
         //TreeView添加根目录
         treeView.setRoot(rootItem);
-        //监听
+        //监听3
         treeView.getSelectionModel().selectedItemProperty().addListener(
                 new ChangeListener<TreeItem <String>>() {
                     @Override
@@ -122,14 +142,15 @@ public class SystemController {
                         if(clickedItemIndex != 0) {
                             currentDirectory = directoryTree.getFCB(newItem.getValue(), newItem.getParent().getValue());
                             updateCurrentPath();
-                            for (FCB fcb : currentDirectory.getChild()
-                                 ) {
-                                list.clear();
-                                list.add(new FCBProperty(fcb));
-                            }
+//                            for (int i = 0; i < currentDirectory.getChild().size(); i++) {
+//                                System.out.println(currentDirectory.getChild().get(i).getName());
+//                            }
+                            selectCount = 0;
+                            updateFileList();
                         }
                     }
                 });
+
 
         // TODO: 2017/6/17 treeview更新
 
@@ -149,8 +170,11 @@ public class SystemController {
         columnName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         columnSize.setCellValueFactory(cellData -> cellData.getValue().sizeProperty());
         columnTime.setCellValueFactory(cellData -> cellData.getValue().timeProperty());
-        columnChoice.setCellValueFactory(cellData -> cellData.getValue().checkbox.getCheckBox());
+//        columnChoice.setCellValueFactory(cellData -> cellData.getValue().checkbox.getCheckBox());
 
+        columnChoice.setCellValueFactory(cellData -> cellData.getValue().imageViewProperty());
+        columnOpen.setCellValueFactory(cellData -> cellData.getValue().openButtonProperty());
+        columnDelete.setCellValueFactory(cellData -> cellData.getValue().deleteButtonProperty());
 
 
 
@@ -169,63 +193,67 @@ public class SystemController {
 
     }
 
-    // TODO: 2017/6/17 checkbox动作现在绑定在button上
-    @FXML
-    private void check()
-    {
-        int selectCount = 0;
-        ObservableList<FCBProperty> list=tableView.getItems();
-        for(FCBProperty fcbProperty:list)
-        {
-            if(fcbProperty.checkbox.isSelected())
-            {
-                selectCount += 1;
-                System.out.println(fcbProperty.getName());
-            }
-        }
+//   checkbox动作现在绑定在button上
+//    @FXML
+//    private void check()
+//    {
+//        int selectCount = 0;
+//        ObservableList<FCBProperty> list=tableView.getItems();
+//        for(FCBProperty fcbProperty:list)
+//        {
+//            if(fcbProperty.checkbox.isSelected())
+//            {
+//                selectCount += 1;
+//                System.out.println(fcbProperty.getName());
+//            }
+//        }
+//
+//    }
 
-    }
-
-    @FXML
-    private void open() {
-//        FXMLLoader loader = FXMLLoader.load(getClass().getResource("file.fxml"));
-//        Stage stage = new Stage();
-//        stage.setTitle("File System");
-//        stage.setScene(new Scene(root, 800, 500));
-//        stage.show();
-    }
-    @FXML
-    private void delete() {
-
-    }
-    @FXML
-    private void showDetails() {
-
-    }
+//    @FXML
+//    private void open() {
+////        FXMLLoader loader = FXMLLoader.load(getClass().getResource("file.fxml"));
+////        Stage stage = new Stage();
+////        stage.setTitle("File System");
+////        stage.setScene(new Scene(root, 800, 500));
+////        stage.show();
+//    }
+//    @FXML
+//    private void delete() {
+//
+//    }
+//    @FXML
+//    private void showDetails() {
+//
+//    }
     @FXML
     private void newFile() {
-
+        directoryTree.addFile(currentDirectory,"new file " + newFileNumber++);
+        updateFileList();
     }
     @FXML
     private void newFolder() {
-
+        directoryTree.addFolder(currentDirectory,"new folder " + newFOlderNumber++);
+        updateFileList();
     }
     @FXML
     private void sortByName() {
-        Comparator<>
-        list.sort();
+        NameComparator nameComparator = new NameComparator();
+        list.sort(nameComparator);
     }
     @FXML
     private void sortBySize() {
-
+        SizeComparator sizeComparator = new SizeComparator();
+        list.sort(sizeComparator);
     }
-    @FXML
-    private void sortByType() {
-
-    }
+//    @FXML
+//    private void sortByType() {
+//
+//    }
     @FXML
     private void sortByModifyTime() {
-
+        TimeComparator timeComparator = new TimeComparator();
+        list.sort(timeComparator);
     }
     @FXML
     private void help() {
@@ -241,7 +269,68 @@ public class SystemController {
         String path = directoryTree.getPath(currentDirectory);
         currentPathText.setText(path);
     }
+
+    //更新文件列表
+    public static void updateFileList() {
+        list.clear();
+        for (FCB fcb : currentDirectory.getChild()
+                ) {
+            list.add(new FCBProperty(fcb));
+        }
+    }
+
 }
+
+//名字比较器
+class NameComparator implements Comparator{
+
+    @Override
+    public int compare(Object o1, Object o2) {
+        String i1 = ((FCBProperty)o1).getName();
+        String i2 = ((FCBProperty)o2).getName();
+        if (i1.compareTo(i2) >=  0){
+            return 1;
+        }
+        if (i1.compareTo(i2) <  0){
+            return -1;
+        }
+        return 0;
+    }
+}
+
+//大小比较器
+class SizeComparator implements Comparator{
+
+    @Override
+    public int compare(Object o1, Object o2) {
+        int i1 = Integer.valueOf(((FCBProperty)o1).getSize());
+        int i2 = Integer.valueOf(((FCBProperty)o2).getSize());
+        if (i1 > i2){
+            return 1;
+        }
+        if (i1 < i2){
+            return -1;
+        }
+        return 0;
+    }
+}
+
+//时间比较器
+class TimeComparator implements Comparator{
+    @Override
+    public int compare(Object o1, Object o2) {
+        String i1 = ((FCBProperty)o1).getTime();
+        String i2 = ((FCBProperty)o2).getTime();
+        if (i1.compareTo(i2) >=  0){
+            return 1;
+        }
+        if (i1.compareTo(i2) <  0){
+            return -1;
+        }
+        return 0;
+    }
+}
+
 
 
 

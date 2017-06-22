@@ -11,6 +11,7 @@ public class DiskManager {
 
     public DiskManager(Disk d, DirectoryTree directoryTree) {
         this.disk = d;
+//        this.disk = ;
         this.directoryTree = directoryTree;
     }
 
@@ -42,11 +43,17 @@ public class DiskManager {
     public void write(FCB fcb, String str) {
         int occupiedBlockCount =  blockCount(fcb);
 
-        int needBlock = str.length() / disk.getDiskSize() ;
-        for (int i = occupiedBlockCount; i < occupiedBlockCount + needBlock; i++) {
-            fcb.setIndexTableI(i, disk.getFreeBlock());
-        }
+        //todo:为什么getDiskSize()不对???
+//        System.out.println("size:"+ Integer.toString(disk.getDiskSize()));
 
+        System.out.println("size:" + disk.getDiskSize());
+//        int needBlock = str.length() / disk.getDiskSize() + 1 ;
+        int needBlock = str.length() / 256 + 1 ;
+        for (int i = occupiedBlockCount; i < occupiedBlockCount + needBlock; i++) {
+            // TODO: 2017/6/21 这里有问题
+            fcb.setIndexTableI(i, disk.getFreeBlock());
+//            fcb.setIndexTableI(i, 1);
+        }
     }
 
     //文件已占用块数
@@ -73,4 +80,6 @@ public class DiskManager {
         details += "Modify Time : " + fcb.getModifyTime() + "\n";
         return details;
     }
+
+
 }

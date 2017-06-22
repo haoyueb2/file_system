@@ -1,15 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.FileController">
+<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.FileController">
    <children>
-      <TextArea layoutX="15.0" layoutY="67.0" prefHeight="319.0" prefWidth="570.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="66.0" />
+      <MenuBar prefHeight="31.0" prefWidth="800.0">
+         <menus>
+            <Menu mnemonicParsing="false" text="File">
+               <items>
+                  <MenuItem fx:id="save" mnemonicParsing="false" onAction="#save" text="Save" />
+                  <MenuItem fx:id="delete" mnemonicParsing="false" onAction="#delete" text="Delete" />
+                  <MenuItem fx:id="close" mnemonicParsing="false" onAction="#close" text="Close" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Authority">
+               <items>
+                  <MenuItem fx:id="readonly" mnemonicParsing="false" onAction="#readonly" text="readonly" />
+                  <MenuItem fx:id="writable" mnemonicParsing="false" onAction="#writable" text="writable" />
+               </items>
+            </Menu>
+
+         </menus>
+      </MenuBar>
+      <GridPane layoutX="35.0" layoutY="49.0" prefHeight="31.0" prefWidth="324.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="255.10995483398438" minWidth="0.0" prefWidth="66.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="478.93233489990234" minWidth="0.0" prefWidth="258.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="141.75390625" minHeight="0.0" prefHeight="36.89006042480469" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="Name :" />
+            <TextField fx:id="nameText" prefHeight="27.0" prefWidth="147.0" GridPane.columnIndex="1" />
+         </children>
+      </GridPane>
+      <TextArea fx:id="context" layoutX="35.0" layoutY="89.0" prefHeight="377.0" prefWidth="728.0" />
    </children>
 </AnchorPane>

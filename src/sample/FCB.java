@@ -156,8 +156,9 @@ public class FCB {
         return modifyTime;
     }
 
-    public void setModifyTime(String modifyTime) {
-        this.modifyTime = modifyTime;
+    public void setModifyTime() {
+
+        this.modifyTime = simpleDateFormat.format(new Date());;
     }
 
     public SimpleDateFormat getSimpleDateFormat() {
