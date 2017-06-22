@@ -10,6 +10,7 @@
          <menus>
             <Menu mnemonicParsing="false" text="File">
                <items>
+                   <MenuItem fx:id="detail" mnemonicParsing="false" onAction="#detail" text="Detail" />
                   <MenuItem fx:id="save" mnemonicParsing="false" onAction="#save" text="Save" />
                   <MenuItem fx:id="delete" mnemonicParsing="false" onAction="#delete" text="Delete" />
                   <MenuItem fx:id="close" mnemonicParsing="false" onAction="#close" text="Close" />
@@ -21,6 +22,7 @@
                   <MenuItem fx:id="writable" mnemonicParsing="false" onAction="#writable" text="writable" />
                </items>
             </Menu>
+
 
          </menus>
       </MenuBar>

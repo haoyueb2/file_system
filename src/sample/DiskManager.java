@@ -9,9 +9,11 @@ public class DiskManager {
 
     private DirectoryTree directoryTree;
 
+    //每个磁盘块大小
+    private int diskSize = 256;
+
     public DiskManager(Disk d, DirectoryTree directoryTree) {
         this.disk = d;
-//        this.disk = ;
         this.directoryTree = directoryTree;
     }
 
@@ -23,6 +25,20 @@ public class DiskManager {
     //关闭 ~
     public void close(FCB fcb) {
 
+    }
+
+    //删除
+    public void delete(FCB fcb) {
+        if(fcb.getType() == FCB.Type.document) {
+            for (int i = 0; i < blockCount(fcb); i++) {
+                int index = fcb.getIndexTable()[i];
+                disk.releaseBlock(index);
+            }
+        } else {
+            while (fcb.getChild().size() != 0) {
+                delete(fcb.getChild().get(0));
+            }
+        }
     }
 
     //读
@@ -43,16 +59,28 @@ public class DiskManager {
     public void write(FCB fcb, String str) {
         int occupiedBlockCount =  blockCount(fcb);
 
-        //todo:为什么getDiskSize()不对???
+//        System.out.println("occupiedBlockCount: " + occupiedBlockCount);
 //        System.out.println("size:"+ Integer.toString(disk.getDiskSize()));
-
-        System.out.println("size:" + disk.getDiskSize());
+//        System.out.println("size:" + disk.getDiskSize());
 //        int needBlock = str.length() / disk.getDiskSize() + 1 ;
-        int needBlock = str.length() / 256 + 1 ;
+
+        int needBlock = str.length() / diskSize + 1 ;
         for (int i = occupiedBlockCount; i < occupiedBlockCount + needBlock; i++) {
-            // TODO: 2017/6/21 这里有问题
-            fcb.setIndexTableI(i, disk.getFreeBlock());
+            int j = i - occupiedBlockCount;
+            int index = disk.getFreeBlock();
+            System.out.println(index);
+            fcb.setIndexTableI(i, index);
+            if(str.length() - j * diskSize >= diskSize) {
+                disk.getBlockList().set(index, str.substring(j * diskSize, (j + 1) * diskSize - 1));
+            } else {
+                disk.getBlockList().set(index, str.substring(j * diskSize));
+            }
 //            fcb.setIndexTableI(i, 1);
+        }
+        if(str.length() <= 1024) {
+            fcb.setSize(str.length() + "B");
+        } else if (str.length() > 1024 && str.length() <= 1024 * 1024 ) {
+            fcb.setSize(str.length() / 1024 + "K");
         }
     }
 

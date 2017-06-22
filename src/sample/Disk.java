@@ -1,6 +1,7 @@
 package sample;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Stack;
 
 
@@ -12,31 +13,31 @@ public class Disk {
     private int diskSize = 256;
 
     //磁盘块数量
-    public final int diskBlockCount = 100;
+    public static int diskBlockCount = 100;
 
     //全部存储
-    private  ArrayList<DiskBlock> blockList = new ArrayList<DiskBlock>();
+    private  ArrayList<String> blockList = new ArrayList<String>();
 
 
     //空块栈
-    private Stack<Integer> freeDiskBlock = new Stack<Integer>();
+    private static Stack<Integer> freeDiskBlock = new Stack<Integer>();
     //已使用块栈
-    private Stack<Integer> fullDiskBlock = new Stack<Integer>();
+    private static Stack<Integer> fullDiskBlock = new Stack<Integer>();
 
     public Disk() {
         this.initStack();
         for (int i = 0; i < diskBlockCount; i++) {
-            blockList.add(new DiskBlock(i));
+            blockList.add(new String());
         }
     }
 
-    private void initStack() {
+    private static void initStack() {
         for (int i = diskBlockCount - 1; i >= 0; i--) {
             freeDiskBlock.push(new Integer(i));
         }
     }
     //获取一个空闲块
-    public int getFreeBlock() {
+    public static int getFreeBlock() {
         if(!freeDiskBlock.empty()) {
             int index = freeDiskBlock.peek();
             fullDiskBlock.push(new Integer(index));
@@ -48,6 +49,9 @@ public class Disk {
     //释放掉一个块
     public void releaseBlock(int index) {
         freeDiskBlock.push(new Integer(index));
+        //clear
+
+        blockList.set(index, "");
     }
     //格式化
     public void format() {
@@ -55,7 +59,7 @@ public class Disk {
         fullDiskBlock.clear();
     }
 
-    public ArrayList<DiskBlock> getBlockList() {
+    public ArrayList<String> getBlockList() {
         return blockList;
     }
 
@@ -74,17 +78,36 @@ public class Disk {
         return diskSize;
     }
 
-    class DiskBlock {
-
-        //编号
-        private int number;
-        //存储
-        private String [] content = new String[getDiskSize()];
-
-        public DiskBlock(int n) {
-            this.number = n;
+    public static void main(String[] args) {
+        initStack();
+//        while(!freeDiskBlock.empty()) {
+//            System.out.println(freeDiskBlock.peek());
+//            freeDiskBlock.pop();
+//        }
+        for (int i = 0; i < 10; i++) {
+            System.out.println("index:"+getFreeBlock());
+            System.out.println("free:"+freeDiskBlock.peek());
+            System.out.println("full:"+fullDiskBlock.peek());
         }
+        for (int i = 0; i < 5; i++) {
+            System.out.println("index:"+getFreeBlock());
+            System.out.println("free:"+freeDiskBlock.peek());
+            System.out.println("full:"+fullDiskBlock.peek());
+        }
+
+
     }
+//    class DiskBlock {
+//
+//        //编号
+//        private int number;
+//        //存储
+//        private String [] content = new String[getDiskSize()];
+//
+//        public DiskBlock(int n) {
+//            this.number = n;
+//        }
+//    }
 }
 
 

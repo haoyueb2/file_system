@@ -29,6 +29,13 @@ public class FileController {
     public void initialize() {
         nameText.setText(fcb.getName());
         context.setText(diskManager.read(fcb));
+        //自动换行
+        context.setWrapText(true);
+        if(fcb.getAuthority() == FCB.Authority.readonly) {
+            context.setEditable(false);
+        } else {
+            context.setEditable(true);
+        }
     }
 
     @FXML
@@ -54,10 +61,17 @@ public class FileController {
     @FXML
     private void close() {
         Main.stages.get(1).close();
+        Main.stages.remove(1);
+        SystemController.updateFileList();
 //        Platform.exit();
 
-        this.save();
-        fcb.setModifyTime();
+//        this.save();
+//        fcb.setModifyTime();
+
+    }
+
+    @FXML
+    private void detail() {
 
     }
 

@@ -35,7 +35,7 @@ public class FCBProperty {
     public FCBProperty(FCB fcb) {
         this.fcb = fcb;
         this.name = new SimpleStringProperty(fcb.getName());
-        this.size = new SimpleStringProperty(Integer.toString(fcb.getSize()));
+        this.size = new SimpleStringProperty(fcb.getSize());
         this.time = new SimpleStringProperty(fcb.getModifyTime());
         if(fcb.getType() == FCB.Type.document) {
             imageView = new SimpleObjectProperty<ImageView>(new ImageView(new Image(getClass().getResourceAsStream("/images/file.png"))));
@@ -46,7 +46,6 @@ public class FCBProperty {
         open.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-//                System.out.println("open" + fcb.name);
                 SystemController.currentFCB = fcb;
                 if(fcb.getType() == FCB.Type.document) {
                     try {
@@ -62,6 +61,7 @@ public class FCBProperty {
                     }
                 } else {
                     SystemController.currentDirectory = fcb;
+                    SystemController.updateCurrentPath();
                     SystemController.updateFileList();
                 }
             }
@@ -70,8 +70,23 @@ public class FCBProperty {
         delete.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                if(fcb.getType() == FCB.Type.document) {
 
+                    SystemController.directoryTree.deleteFile(fcb);
+                    SystemController.diskManager.delete(fcb);
 
+                    System.out.println("aftrer delete:");
+                    for (int i = 0; i < SystemController.directoryTree.getDirectoryTree().size(); i++) {
+                        System.out.println(SystemController.directoryTree.getDirectoryTree().get(i).getName());
+                    }
+                    SystemController.updateFileList();
+
+                } else {
+                    SystemController.currentDirectory = fcb.getParent();
+                    SystemController.directoryTree.deleteFolder(fcb);
+                    SystemController.diskManager.delete(fcb);
+                    SystemController.updateFileList();
+                }
 
             }
 

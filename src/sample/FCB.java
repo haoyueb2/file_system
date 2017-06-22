@@ -20,7 +20,7 @@ public class FCB {
     //文件名称
     public String name;
     //文件大小
-    private int size;
+    private String size;
 //    //限制大小
 //    private static final int MAX_SIZE = ;
 
@@ -49,7 +49,7 @@ public class FCB {
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     //索引结构
-    private int [] indexTable = new int [11];
+    private int [] indexTable = new int [20];
 
 //    //文件操作
 //    private FileOperations fileOperations = new FileOperations(this);
@@ -64,7 +64,11 @@ public class FCB {
     public FCB(String name, Type type, FCB parentNode) {
         this.name = name;
         this.type = type;
-        this.size = 0;
+        if(type == Type.document) {
+            this.size = "0";
+        } else {
+            this.size = " ";
+        }
         this.authority = Authority.writable;
         this.parent = parentNode;
         if(parent != null) {
@@ -120,11 +124,11 @@ public class FCB {
         this.fileID = fileID;
     }
 
-    public int getSize() {
+    public String getSize() {
         return size;
     }
 
-    public void setSize(int size) {
+    public void setSize(String size) {
         this.size = size;
     }
 

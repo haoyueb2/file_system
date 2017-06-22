@@ -1,25 +1,18 @@
 package sample;
 
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -39,6 +32,9 @@ public class SystemController {
 
     @FXML private TextField currentPathText;
 
+    private static StringProperty path = new SimpleStringProperty();
+
+
     public static int selectCount = 0;
 
     //编号
@@ -55,7 +51,7 @@ public class SystemController {
     );
 
     //目录树
-    private static DirectoryTree directoryTree = new DirectoryTree();
+    public static DirectoryTree directoryTree = new DirectoryTree();
 
 
     //当前目录
@@ -63,7 +59,7 @@ public class SystemController {
 
 //    public static ObjectProperty<FCB> currentDirectory = new SimpleObjectProperty<>(directoryTree.getRoot());
 
-    private static Disk disk;
+    private static Disk disk = new Disk();
 
     public static DiskManager diskManager = new DiskManager(disk, directoryTree);
 
@@ -101,6 +97,16 @@ public class SystemController {
 
     public void initialize() {
 
+        //change current path
+        path.addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                currentPathText.setText(newValue);
+            }
+        });
+
+
+
         //--------------------------------Tree View-------------------------------------
         //初始化目录树
         TreeItem<String> rootItem = new TreeItem<String>(
@@ -128,7 +134,7 @@ public class SystemController {
         addTree(rootItem);
         //TreeView添加根目录
         treeView.setRoot(rootItem);
-        //监听3
+        //监听
         treeView.getSelectionModel().selectedItemProperty().addListener(
                 new ChangeListener<TreeItem <String>>() {
                     @Override
@@ -141,13 +147,11 @@ public class SystemController {
 
                         if(clickedItemIndex != 0) {
                             currentDirectory = directoryTree.getFCB(newItem.getValue(), newItem.getParent().getValue());
-                            updateCurrentPath();
-//                            for (int i = 0; i < currentDirectory.getChild().size(); i++) {
-//                                System.out.println(currentDirectory.getChild().get(i).getName());
-//                            }
-                            selectCount = 0;
-                            updateFileList();
+                        } else {
+                            currentDirectory = directoryTree.getRoot();
                         }
+                        updateCurrentPath();
+                        updateFileList();
                     }
                 });
 
@@ -164,14 +168,13 @@ public class SystemController {
 //        ObservableList<FCBProperty> list = FXCollections.observableArrayList();
 
 
-        list.add(new FCBProperty(new FCB("1", FCB.Type.document,null)));
-        list.add(new FCBProperty(new FCB("2", FCB.Type.document,null)));
+//        list.add(new FCBProperty(new FCB("1", FCB.Type.document,null)));
+//        list.add(new FCBProperty(new FCB("2", FCB.Type.document,null)));
+
 
         columnName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         columnSize.setCellValueFactory(cellData -> cellData.getValue().sizeProperty());
         columnTime.setCellValueFactory(cellData -> cellData.getValue().timeProperty());
-//        columnChoice.setCellValueFactory(cellData -> cellData.getValue().checkbox.getCheckBox());
-
         columnChoice.setCellValueFactory(cellData -> cellData.getValue().imageViewProperty());
         columnOpen.setCellValueFactory(cellData -> cellData.getValue().openButtonProperty());
         columnDelete.setCellValueFactory(cellData -> cellData.getValue().deleteButtonProperty());
@@ -210,22 +213,7 @@ public class SystemController {
 //
 //    }
 
-//    @FXML
-//    private void open() {
-////        FXMLLoader loader = FXMLLoader.load(getClass().getResource("file.fxml"));
-////        Stage stage = new Stage();
-////        stage.setTitle("File System");
-////        stage.setScene(new Scene(root, 800, 500));
-////        stage.show();
-//    }
-//    @FXML
-//    private void delete() {
-//
-//    }
-//    @FXML
-//    private void showDetails() {
-//
-//    }
+
     @FXML
     private void newFile() {
         directoryTree.addFile(currentDirectory,"new file " + newFileNumber++);
@@ -246,10 +234,7 @@ public class SystemController {
         SizeComparator sizeComparator = new SizeComparator();
         list.sort(sizeComparator);
     }
-//    @FXML
-//    private void sortByType() {
-//
-//    }
+
     @FXML
     private void sortByModifyTime() {
         TimeComparator timeComparator = new TimeComparator();
@@ -265,18 +250,26 @@ public class SystemController {
     }
 
     //刷新路径
-    private void updateCurrentPath() {
-        String path = directoryTree.getPath(currentDirectory);
-        currentPathText.setText(path);
+    public static void updateCurrentPath() {
+//        String path = directoryTree.getPath(currentDirectory);
+//        currentPathText.setText(path);
+        path.setValue(directoryTree.getPath(currentDirectory));
     }
 
     //更新文件列表
     public static void updateFileList() {
         list.clear();
+        System.out.println("result:");
         for (FCB fcb : currentDirectory.getChild()
                 ) {
             list.add(new FCBProperty(fcb));
+            System.out.println(fcb.getName());
         }
+    }
+
+    //todo: stack overflow
+    public void treeToString() {
+
     }
 
 }
@@ -303,12 +296,13 @@ class SizeComparator implements Comparator{
 
     @Override
     public int compare(Object o1, Object o2) {
-        int i1 = Integer.valueOf(((FCBProperty)o1).getSize());
-        int i2 = Integer.valueOf(((FCBProperty)o2).getSize());
-        if (i1 > i2){
+        String i1 = ((FCBProperty)o1).getSize();
+//        String i2 = Integer.valueOf(((FCBProperty)o2).getSize());
+        String i2 = ((FCBProperty)o2).getSize();
+        if (i1.compareTo(i2) >=  0){
             return 1;
         }
-        if (i1 < i2){
+        if (i1.compareTo(i2) <  0){
             return -1;
         }
         return 0;
@@ -321,10 +315,10 @@ class TimeComparator implements Comparator{
     public int compare(Object o1, Object o2) {
         String i1 = ((FCBProperty)o1).getTime();
         String i2 = ((FCBProperty)o2).getTime();
-        if (i1.compareTo(i2) >=  0){
+        if (i1.compareTo(i2) <  0){
             return 1;
         }
-        if (i1.compareTo(i2) <  0){
+        if (i1.compareTo(i2) >=  0){
             return -1;
         }
         return 0;

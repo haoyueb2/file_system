@@ -34,9 +34,6 @@ public class DirectoryTree {
         FCB haha = new FCB("haha.png",FCB.Type.document, imagesFCB);
         directoryTree.add(haha);
 
-//        System.out.println(haha.getSize());
-//        System.out.println(haha.getCreateTime());
-//        System.out.println(haha.getModifyTime());
     }
 
 
@@ -58,8 +55,8 @@ public class DirectoryTree {
                 deleteFolder(fcb.getChild().get(0));
             }
             directoryTree.remove(fcb);
-            fcb = null;
         }
+        fcb.getParent().getChild().remove(fcb);
     }
 
     //新建文件
@@ -72,13 +69,12 @@ public class DirectoryTree {
     }
 
     //删除文件
-    // TODO: 2017/6/20 block释放
     public void deleteFile(FCB fcb) {
         directoryTree.remove(fcb);
-        fcb = null;
+        //remember to remove from parent
+        fcb.getParent().getChild().remove(fcb);
     }
 
-    // TODO: 2017/6/20 重名文件和文件夹?
     //当前目录下是否有重名
     public boolean isSameName(FCB parent, String name) {
         for (int i = 0; i < parent.getChild().size(); i++) {
