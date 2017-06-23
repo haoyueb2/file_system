@@ -55,8 +55,8 @@
             </Menu>
             <Menu mnemonicParsing="false" text="Help">
                <items>
-                   <MenuItem mnemonicParsing="false" onAction="#help" text="Help" />
-                  <MenuItem mnemonicParsing="false" onAction="#about" text="About" />
+                   <MenuItem mnemonicParsing="false"  text="Help" />
+                  <MenuItem mnemonicParsing="false"  text="About" />
                </items>
             </Menu>
          </menus>

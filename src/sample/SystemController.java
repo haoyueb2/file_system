@@ -64,6 +64,9 @@ public class SystemController {
     public static DiskManager diskManager = new DiskManager(disk, directoryTree);
 
     private Image folderImage = new Image(getClass().getResourceAsStream("/images/004-folder-5.png"));
+    //
+    private ArrayList<String> allPath = new ArrayList<>();
+
 
 //    private Image file = new Image(getClass().getResourceAsStream("/images/file.png"));
 //    private Image folder = new Image(getClass().getResourceAsStream("/images/folders.png"));
@@ -95,7 +98,44 @@ public class SystemController {
         return null;
     }
 
+    public void getAllPath() {
+
+        for (FCB fcb : directoryTree.getDirectoryTree()
+                ) {
+//            if(fcb == directoryTree.getRoot()) {
+//                continue;
+//            }
+            if(fcb != directoryTree.getRoot() && fcb.getType() == FCB.Type.folder) {
+                allPath.add(directoryTree.getPath2(fcb));
+            }
+//            System.out.println(getPath2(fcb));
+        }
+
+
+        allPath.sort(new PathComparator());
+    }
+
+    private TreeItem<String> getOrCreateChild(TreeItem<String> parent, String value) {
+
+        for (TreeItem<String> child : parent.getChildren()) {
+            if (value.equals(child.getValue())) {
+                return child ;
+            }
+        }
+
+        TreeItem<String> newChild = new TreeItem<>(value, new ImageView(folderImage));
+        parent.getChildren().add(newChild);
+        newChild.setExpanded(true);
+        return newChild ;
+    }
+
     public void initialize() {
+
+        getAllPath();
+//        for (String s: allPath
+//             ) {
+//            System.out.println(s);
+//        }
 
         //change current path
         path.addListener(new ChangeListener<String>() {
@@ -107,31 +147,22 @@ public class SystemController {
 
 
 
-        //--------------------------------Tree View-------------------------------------
+        //todo--------------------------------Tree View-------------------------------------
         //初始化目录树
         TreeItem<String> rootItem = new TreeItem<String>(
                 directoryTree.getRoot().getName(), rootIcon
         );
         //根目录展开
         rootItem.setExpanded(true);
-        //添加子目录
-//        for (int i = 1; i < directoryTree.getDirectoryTree().size(); i++) {
-//            FCB current = directoryTree.getDirectoryTree().get(i);
-//            TreeItem<String> parent = getParentItem(current);
-//
-//            if(current.getType() == FCB.Type.folder) {
-//                TreeItem<String> item = new TreeItem<String> (current.getName(), new ImageView(folderImage));
-//                if(parent == rootItem) {
-//                    rootItem.getChildren().add(item);
-//                } else if (parent == null){
-//                    System.out.println("null");
-//                } else {
-//                    parent.getChildren().add(item);
-//                }
-//                item.setExpanded(true);
-//            }
-//        }
-        addTree(rootItem);
+
+        for (String path : allPath) {
+            TreeItem<String> current = rootItem ;
+            for (String component : path.split("\\.")) {
+                current = getOrCreateChild(current, component);
+            }
+        }
+
+//        addTree(rootItem);
         //TreeView添加根目录
         treeView.setRoot(rootItem);
         //监听
@@ -147,6 +178,7 @@ public class SystemController {
 
                         if(clickedItemIndex != 0) {
                             currentDirectory = directoryTree.getFCB(newItem.getValue(), newItem.getParent().getValue());
+                            System.out.println("currentDirectory:"+currentDirectory.getName());
                         } else {
                             currentDirectory = directoryTree.getRoot();
                         }
@@ -163,13 +195,6 @@ public class SystemController {
 
 
 
-
-
-//        ObservableList<FCBProperty> list = FXCollections.observableArrayList();
-
-
-//        list.add(new FCBProperty(new FCB("1", FCB.Type.document,null)));
-//        list.add(new FCBProperty(new FCB("2", FCB.Type.document,null)));
 
 
         columnName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
@@ -240,14 +265,7 @@ public class SystemController {
         TimeComparator timeComparator = new TimeComparator();
         list.sort(timeComparator);
     }
-    @FXML
-    private void help() {
 
-    }
-    @FXML
-    private void about() {
-
-    }
 
     //刷新路径
     public static void updateCurrentPath() {
@@ -259,18 +277,17 @@ public class SystemController {
     //更新文件列表
     public static void updateFileList() {
         list.clear();
-        System.out.println("result:");
+//        System.out.println("result:");
         for (FCB fcb : currentDirectory.getChild()
                 ) {
             list.add(new FCBProperty(fcb));
-            System.out.println(fcb.getName());
+//            System.out.println(fcb.getName());
         }
     }
 
-    //todo: stack overflow
-    public void treeToString() {
 
-    }
+
+
 
 }
 
@@ -281,6 +298,23 @@ class NameComparator implements Comparator{
     public int compare(Object o1, Object o2) {
         String i1 = ((FCBProperty)o1).getName();
         String i2 = ((FCBProperty)o2).getName();
+        if (i1.compareTo(i2) >=  0){
+            return 1;
+        }
+        if (i1.compareTo(i2) <  0){
+            return -1;
+        }
+        return 0;
+    }
+}
+
+//path比较器
+class PathComparator implements Comparator{
+
+    @Override
+    public int compare(Object o1, Object o2) {
+        String i1 = (String)o1;
+        String i2 = (String)o2;
         if (i1.compareTo(i2) >=  0){
             return 1;
         }

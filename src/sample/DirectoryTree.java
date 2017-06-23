@@ -1,6 +1,7 @@
 package sample;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Stack;
 
 /**
@@ -21,17 +22,17 @@ public class DirectoryTree {
         directoryTree.add(documentFCB);
         FCB imagesFCB = new FCB("Images",FCB.Type.folder, root);
         directoryTree.add(imagesFCB);
-        FCB FCB1 = new FCB("1",FCB.Type.folder, documentFCB);
+        FCB FCB1 = new FCB("a",FCB.Type.folder, documentFCB);
         directoryTree.add(FCB1);
-        FCB FCB2 = new FCB("2",FCB.Type.folder, documentFCB);
+        FCB FCB2 = new FCB("b",FCB.Type.folder, documentFCB);
         directoryTree.add(FCB2);
-        FCB FCB3 = new FCB("3",FCB.Type.folder, imagesFCB);
+        FCB FCB3 = new FCB("c",FCB.Type.folder, imagesFCB);
         directoryTree.add(FCB3);
 
-        directoryTree.add(new FCB("haha.txt",FCB.Type.document, documentFCB));
-        directoryTree.add(new FCB("xixi.txt",FCB.Type.document, documentFCB));
+        directoryTree.add(new FCB("haha",FCB.Type.document, documentFCB));
+        directoryTree.add(new FCB("xixi",FCB.Type.document, documentFCB));
 
-        FCB haha = new FCB("haha.png",FCB.Type.document, imagesFCB);
+        FCB haha = new FCB("haha",FCB.Type.document, imagesFCB);
         directoryTree.add(haha);
 
     }
@@ -87,10 +88,13 @@ public class DirectoryTree {
 
     //获取路径
     public String getPath(FCB fcb) {
+        System.out.println("getpathof:"+fcb.getName());
         String path = root.getName();
         Stack<String> stack = new Stack<String>();
         FCB currentNode = fcb;
         while(currentNode != this.root) {
+            // FIXME: 2017/6/23
+            System.out.println("currentNode:"+currentNode.getName());
             stack.push(currentNode.getName());
             currentNode = currentNode.getParent();
         }
@@ -101,11 +105,43 @@ public class DirectoryTree {
         return path;
     }
 
+    //获取路径
+    public String getPath2(FCB fcb) {
+        String path = "";
+        FCB current = fcb;
+        path = fcb.getName();
+        if(current != root) {
+            while (current.getParent() != root) {
+                current = current.getParent();
+                path = current.getName() + "." + path;
+            }
+        }
+        return path;
+    }
+
+
     //通过名字找FCB
+    // FIXME: 2017/6/23
     public FCB getFCB(String name, String parent) {
+
+        System.out.println("__________________________________________________________");
+        System.out.println("name:"+name);
+        System.out.println("parent:"+parent);
+
         for (FCB fcb : directoryTree
              ) {
-            if(fcb.getName() == name && fcb.getParent().getName() == parent) {
+//            fcb.getParent().getName();
+//            System.out.println("fcb:"+ fcb.getName());
+//            if (fcb.getParent()!= null ) {
+//                System.out.println(" p:" + fcb.getParent().getName());
+//            }
+//
+//            if(fcb.getName().equals(name))
+//                System.out.println("fcb.getName() == name");
+//            if(fcb.getParent()!= null && fcb.getParent().getName() == parent)
+//                System.out.println("fcb.getParent().getName() == parent");
+
+            if(fcb.getParent()!= null && fcb.getName().equals(name) && fcb.getParent().getName().equals(parent)) {
                 return fcb;
             }
         }
@@ -130,8 +166,8 @@ public class DirectoryTree {
     }
 
     public static void main(String[] args) {
-        DirectoryTree d = new DirectoryTree();
-        d.addFolder(root,"music");
+
 
     }
 }
+
