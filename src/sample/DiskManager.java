@@ -1,5 +1,7 @@
 package sample;
 
+import java.util.ArrayList;
+
 /**
  * Created by keke on 2017/6/7.
  */
@@ -9,22 +11,15 @@ public class DiskManager {
 
     private DirectoryTree directoryTree;
 
+    //系统打开文件表
+    public static ArrayList<FCB> openFileTable = new ArrayList<>();
+
     //每个磁盘块大小
     private int diskSize = 256;
 
     public DiskManager(Disk d, DirectoryTree directoryTree) {
         this.disk = d;
         this.directoryTree = directoryTree;
-    }
-
-    //打开
-    public void Open(FCB fcb) {
-
-    }
-
-    //关闭 ~
-    public void close(FCB fcb) {
-
     }
 
     //删除
@@ -59,21 +54,24 @@ public class DiskManager {
     public void write(FCB fcb, String str) {
         int occupiedBlockCount =  blockCount(fcb);
 
-//        System.out.println("occupiedBlockCount: " + occupiedBlockCount);
-//        System.out.println("size:"+ Integer.toString(disk.getDiskSize()));
-//        System.out.println("size:" + disk.getDiskSize());
-//        int needBlock = str.length() / disk.getDiskSize() + 1 ;
+        //初始化
+        for (int i = 0; i < occupiedBlockCount; i++) {
+            disk.releaseBlock(fcb.getIndexTable()[i]);
+            fcb.setIndexTableI(i, -1);
+        }
+
 
         int needBlock = str.length() / diskSize + 1 ;
-        for (int i = occupiedBlockCount; i < occupiedBlockCount + needBlock; i++) {
-            int j = i - occupiedBlockCount;
+//        for (int i = occupiedBlockCount; i < occupiedBlockCount + needBlock; i++) {
+//            int j = i - occupiedBlockCount;
+        for (int i = 0; i < needBlock; i++) {
             int index = disk.getFreeBlock();
-            System.out.println(index);
+//            System.out.println(index);
             fcb.setIndexTableI(i, index);
-            if(str.length() - j * diskSize >= diskSize) {
-                disk.getBlockList().set(index, str.substring(j * diskSize, (j + 1) * diskSize - 1));
+            if(str.length() - i * diskSize >= diskSize) {
+                disk.getBlockList().set(index, str.substring(i * diskSize, (i + 1) * diskSize - 1));
             } else {
-                disk.getBlockList().set(index, str.substring(j * diskSize));
+                disk.getBlockList().set(index, str.substring(i * diskSize));
             }
 //            fcb.setIndexTableI(i, 1);
         }

@@ -13,6 +13,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 
 /**
@@ -23,7 +24,7 @@ public class FCBProperty {
     private StringProperty size;
     private StringProperty time;
 //    private boolean choice;
-    public MyCheckBox checkbox = new MyCheckBox();
+
     private FCB fcb;
     private ObjectProperty<ImageView> imageView;
     private Button open = new Button("open");
@@ -38,23 +39,51 @@ public class FCBProperty {
         this.size = new SimpleStringProperty(fcb.getSize());
         this.time = new SimpleStringProperty(fcb.getModifyTime());
         if(fcb.getType() == FCB.Type.document) {
-            imageView = new SimpleObjectProperty<ImageView>(new ImageView(new Image(getClass().getResourceAsStream("/images/file.png"))));
+            imageView = new SimpleObjectProperty<ImageView>(
+                    new ImageView(new Image(getClass().getResourceAsStream("/images/file.png")))
+            );
         } else {
-            imageView = new SimpleObjectProperty<ImageView>(new ImageView(new Image(getClass().getResourceAsStream("/images/004-folder-5.png"))));
+            imageView = new SimpleObjectProperty<ImageView>(
+                    new ImageView(new Image(getClass().getResourceAsStream("/images/004-folder-5.png")))
+            );
         }
 //        this.choice = false;
         open.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+//                System.out.println(fcb.getName());
                 SystemController.currentFCB = fcb;
+//                System.out.println(SystemController.currentFCB.getName());
+//                System.out.println(fcb.getName());
                 if(fcb.getType() == FCB.Type.document) {
+//                    System.out.println("doc");
                     try {
-                        Parent root = FXMLLoader.load(getClass().getResource("file.fxml"));
-                        Stage stage = new Stage();
-                        Main.stages.add(stage);
-                        stage.setTitle("File");
-                        stage.setScene(new Scene(root, 800, 500));
-                        stage.show();
+                        if(! DiskManager.openFileTable.contains(fcb)) {
+//                            System.out.println("!contain");
+                            Parent root = FXMLLoader.load(getClass().getResource("file.fxml"));
+                            Stage stage = new Stage();
+                            Main.stages.put(fcb,stage);
+                            stage.setTitle("File");
+                            stage.setScene(new Scene(root, 800, 500));
+                            stage.show();
+
+                            DiskManager.openFileTable.add(fcb);
+
+                            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                                @Override
+                                public void handle(WindowEvent event) {
+
+
+//                                    Main.stages.get(fcb).close();
+
+                                    Main.stages.remove(fcb);
+
+                                    DiskManager.openFileTable.remove(fcb);
+
+                                    SystemController.updateFileList();
+                                }
+                            });
+                        }
 
                     } catch (Exception e) {
                         System.out.println(e);
@@ -75,10 +104,10 @@ public class FCBProperty {
                     SystemController.directoryTree.deleteFile(fcb);
                     SystemController.diskManager.delete(fcb);
 
-                    System.out.println("aftrer delete:");
-                    for (int i = 0; i < SystemController.directoryTree.getDirectoryTree().size(); i++) {
-                        System.out.println(SystemController.directoryTree.getDirectoryTree().get(i).getName());
-                    }
+//                    System.out.println("aftrer delete:");
+//                    for (int i = 0; i < SystemController.directoryTree.getDirectoryTree().size(); i++) {
+//                        System.out.println(SystemController.directoryTree.getDirectoryTree().get(i).getName());
+//                    }
                     SystemController.updateFileList();
 
                 } else {
