@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.SystemController">
+<Pane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
       <SplitPane layoutX="243.0" layoutY="68.0" prefHeight="425.0" prefWidth="549.0">
          <items>
@@ -28,30 +28,14 @@
             </TableView>
          </items>
       </SplitPane>
-      <MenuBar prefHeight="20.0" prefWidth="800.0">
-         <menus>
-            <Menu mnemonicParsing="false" text="New">
-               <items>
-                  <MenuItem fx:id="newFile" mnemonicParsing="false" onAction="#newFile" text="File" />
-                   <MenuItem fx:id="newFolder" mnemonicParsing="false" onAction="#newFolder" text="Folder" />
-               </items>
-            </Menu>
-             <!--<Menu mnemonicParsing="false" text="Edit">-->
-                 <!--<items>-->
-                     <!--<MenuItem fx:id="open" mnemonicParsing="false" onAction="#open" text="Open" />-->
-                     <!--<MenuItem fx:id="delete" mnemonicParsing="false" onAction="#delete" text="Delete" />-->
-                     <!--<MenuItem fx:id="showDetails" mnemonicParsing="false" onAction="#showDetails" text="Show Details" />-->
-                 <!--</items>-->
-             <!--</Menu>-->
 
-
-         </menus>
-      </MenuBar>
       <TextField fx:id="currentPathText" editable="false" layoutX="348.0" layoutY="35.0" prefHeight="27.0" prefWidth="444.0" />
       <Label layoutX="249.0" layoutY="40.0" text="Current Path : " />
       <AnchorPane layoutY="62.0" prefHeight="316.0" prefWidth="240.0">
          <children>
-            <Button fx:id="back" layoutX="34.0" layoutY="24.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="116.0" text="返回上一级" />
+            <Button fx:id="back" layoutX="47.0" layoutY="195.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="116.0" text="返回上一级" />
+            <Button fx:id="makeFile" layoutX="47.0" layoutY="75.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="116.0" text="新建文件" />
+            <Button fx:id="makeDir" layoutX="47.0" layoutY="131.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="116.0" text="新建子目录" />
          </children>
       </AnchorPane>
    </children>

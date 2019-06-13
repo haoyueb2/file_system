@@ -2,7 +2,6 @@ package sample;
 
 //import com.sun.javafx.robot.impl.FXRobotHelper;
 import javafx.application.Application;
-import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,9 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class Main extends Application {
 
@@ -25,7 +22,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("system.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         stages.put(null,primaryStage);
         primaryStage.setTitle("File System");
         primaryStage.setScene(new Scene(root, 800, 500));
@@ -35,7 +32,8 @@ public class Main extends Application {
             @Override
             public void handle(WindowEvent event) {
                 System.out.print("监听到窗口关闭");
-                saveObjToFile(SystemController.directoryTree);
+                saveObjToFile(Controller.directoryTree);
+                saveDiskToFile(Controller.disk);
             }
         });
 
@@ -43,16 +41,26 @@ public class Main extends Application {
     public void saveObjToFile(DirectoryTree directoryTree){
         try {
             //写对象流的对象
-            ObjectOutputStream oos=new ObjectOutputStream(new FileOutputStream("data.dmg"));
-
-            oos.writeObject(directoryTree);                 //将Person对象p写入到oos中
-
+            ObjectOutputStream oos=new ObjectOutputStream(new FileOutputStream("data.txt"));
+            oos.writeObject(directoryTree);
             oos.close();                        //关闭文件流
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    public void saveDiskToFile(Disk disk){
+        try {
+            //写对象流的对象
+            ObjectOutputStream oos=new ObjectOutputStream(new FileOutputStream("disk.txt"));
+            oos.writeObject(disk);
+            oos.close();                        //关闭文件流
+        } catch (FileNotFoundException e) {
+
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

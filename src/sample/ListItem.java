@@ -1,24 +1,18 @@
 package sample;
 
 import javafx.beans.property.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-
-import java.io.Serializable;
 
 
-public class FCBProperty{
+public class ListItem {
     private StringProperty name;
     private StringProperty size;
     private StringProperty time;
@@ -32,7 +26,7 @@ public class FCBProperty{
     private ObjectProperty<Button> deleteButton = new SimpleObjectProperty<Button>(delete);
 
 
-    public FCBProperty(FCB fcb) {
+    public ListItem(FCB fcb) {
         this.fcb = fcb;
         this.name = new SimpleStringProperty(fcb.getName());
         this.size = new SimpleStringProperty(fcb.getSize());
@@ -51,8 +45,8 @@ public class FCBProperty{
             @Override
             public void handle(ActionEvent event) {
 //                System.out.println(fcb.getName());
-                SystemController.currentFCB = fcb;
-//                System.out.println(SystemController.currentFCB.getName());
+                Controller.currentFCB = fcb;
+//                System.out.println(Controller.currentFCB.getName());
 //                System.out.println(fcb.getName());
                 if (fcb.getType() == FCB.Type.document) {
 //                    System.out.println("doc");
@@ -74,7 +68,7 @@ public class FCBProperty{
 
                                 DiskManager.openFileTable.remove(fcb);
 
-                                SystemController.updateFileList();
+                                Controller.updateFileList();
                             });
                         }
 
@@ -82,9 +76,9 @@ public class FCBProperty{
                         System.out.println(e);
                     }
                 } else {
-                    SystemController.currentDirectory = fcb;
-                    SystemController.updateCurrentPath();
-                    SystemController.updateFileList();
+                    Controller.currentDirectory = fcb;
+                    Controller.updateCurrentPath();
+                    Controller.updateFileList();
                 }
             }
         });
@@ -92,17 +86,17 @@ public class FCBProperty{
         delete.setOnAction(event -> {
             if(fcb.getType() == FCB.Type.document) {
 
-                SystemController.directoryTree.deleteFile(fcb);
-                SystemController.diskManager.delete(fcb);
+                Controller.directoryTree.deleteFile(fcb);
+                Controller.diskManager.delete(fcb);
 
 
-                SystemController.updateFileList();
+                Controller.updateFileList();
 
             } else {
-                SystemController.currentDirectory = fcb.getParent();
-                SystemController.directoryTree.deleteFolder(fcb);
-                SystemController.diskManager.delete(fcb);
-                SystemController.updateFileList();
+                Controller.currentDirectory = fcb.getParent();
+                Controller.directoryTree.deleteFolder(fcb);
+                Controller.diskManager.delete(fcb);
+                Controller.updateFileList();
             }
 
         });

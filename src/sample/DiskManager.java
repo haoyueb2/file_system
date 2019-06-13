@@ -7,17 +7,14 @@ public class DiskManager {
 
     private Disk disk;
 
-    private DirectoryTree directoryTree;
-
     //系统打开文件表
     public static ArrayList<FCB> openFileTable = new ArrayList<>();
 
     //每个磁盘块大小
     private int diskSize = 256;
 
-    public DiskManager(Disk d, DirectoryTree directoryTree) {
+    public DiskManager(Disk d) {
         this.disk = d;
-        this.directoryTree = directoryTree;
     }
 
     //删除
@@ -47,11 +44,8 @@ public class DiskManager {
         return str;
     }
 
-    //写 ~
-    // TODO: 2017/6/20 追加写?
+
     public void write(FCB fcb, String str) {
-
-
         int occupiedBlockCount =  blockCount(fcb);
 
         //初始化

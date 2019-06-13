@@ -5,12 +5,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
@@ -18,25 +15,23 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.Map;
 
 
-public class SystemController {
+public class Controller {
 
-    @FXML private Pane root;
+    public Pane root;
+    public TableView<ListItem> tableView;
+    public TableColumn<ListItem, ImageView> columnChoice;
+    public TableColumn<ListItem, String> columnName;
+    public TableColumn<ListItem, String> columnSize;
+    public TableColumn<ListItem, String> columnTime;
+    public TableColumn<ListItem, Button> columnOpen;
+    public TableColumn<ListItem, Button> columnDelete;
+    public TextField currentPathText;
+    public Button back;
+    public Button makeDir;
+    public Button makeFile;
 
-
-    @FXML private TableView<FCBProperty> tableView;
-    @FXML private TableColumn<FCBProperty, ImageView> columnChoice;
-    @FXML private TableColumn<FCBProperty, String> columnName;
-    @FXML private TableColumn<FCBProperty, String> columnSize;
-    @FXML private TableColumn<FCBProperty, String> columnTime;
-    @FXML private TableColumn<FCBProperty, Button> columnOpen;
-    @FXML private TableColumn<FCBProperty, Button> columnDelete;
-
-    @FXML private TextField currentPathText;
-
-    @FXML private Button back;
     private static StringProperty path = new SimpleStringProperty();
 
 
@@ -45,9 +40,10 @@ public class SystemController {
     private int newFileNumber = 0;
     private int newFOlderNumber = 0;
 
+
     public static FCB currentFCB = null;
 
-    public static ObservableList<FCBProperty> list = FXCollections.observableArrayList();
+    public static ObservableList<ListItem> list = FXCollections.observableArrayList();
 
     //目录树
     public static DirectoryTree directoryTree = new DirectoryTree();
@@ -57,12 +53,12 @@ public class SystemController {
     public static FCB currentDirectory = directoryTree.getRoot();
 
 
-    private static Disk disk = new Disk();
+    public static Disk disk = new Disk();
 
-    public static DiskManager diskManager = new DiskManager(disk, directoryTree);
+    public static DiskManager diskManager = new DiskManager(disk);
 
-
-
+    public boolean file_not_found_flag = false;
+    public boolean disk_not_found_flag = false;
     public void initialize() {
         //change current path
         path.addListener((observable, oldValue, newValue) -> currentPathText.setText(newValue));
@@ -78,29 +74,38 @@ public class SystemController {
 //        });
 
 
-        directoryTree = getObjFromFile();
-        currentDirectory = directoryTree.getRoot();
-        updateCurrentPath();
-        updateFileList();
+        DirectoryTree tmp = getObjFromFile();
+        if(!file_not_found_flag) {
+            directoryTree = tmp;
+            currentDirectory = directoryTree.getRoot();
+        }
+        Disk tmp2 = getDiskFromFile();
+        if(!disk_not_found_flag) {
+            disk = tmp2;
+            diskManager = new DiskManager(disk);
+        }
+// TODO 待加入格式化和文件详细信息
         back.setOnAction(e-> {
             currentDirectory = currentFCB.getParent();
             updateCurrentPath();
             updateFileList();
             currentFCB = currentFCB.getParent();
         });
+        makeDir.setOnAction(e-> {
+            directoryTree.addFolder(currentDirectory,"new folder " + newFOlderNumber++);
+            updateFileList();
 
-    }
+        });
+        makeFile.setOnAction(e-> {
+            directoryTree.addFile(currentDirectory,"new file " + newFileNumber++);
+            updateFileList();
+        });
 
-    @FXML
-    private void newFile() {
-        directoryTree.addFile(currentDirectory,"new file " + newFileNumber++);
+        updateCurrentPath();
         updateFileList();
     }
-    @FXML
-    private void newFolder() {
-        directoryTree.addFolder(currentDirectory,"new folder " + newFOlderNumber++);
-        updateFileList();
-    }
+
+
 
 
     private void initTableView() {
@@ -126,19 +131,38 @@ public class SystemController {
 //        System.out.println("result:");
         for (FCB fcb : currentDirectory.getChild()
                 ) {
-            list.add(new FCBProperty(fcb));
+            list.add(new ListItem(fcb));
 //            System.out.println(fcb.getName());
         }
     }
     public DirectoryTree getObjFromFile(){
         try {
-            ObjectInputStream ois=new ObjectInputStream(new FileInputStream("data.dmg"));
+            ObjectInputStream ois=new ObjectInputStream(new FileInputStream("data.txt"));
 
             DirectoryTree test = (DirectoryTree)ois.readObject();              //读出对象
 
             return test;                                       //返回对象
         } catch (FileNotFoundException e) {
-            //file_not_found_flag = true;
+            file_not_found_flag = true;
+//            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public Disk getDiskFromFile(){
+        try {
+            ObjectInputStream ois=new ObjectInputStream(new FileInputStream("disk.txt"));
+
+            Disk test = (Disk)ois.readObject();              //读出对象
+
+            return test;                                       //返回对象
+        } catch (FileNotFoundException e) {
+            disk_not_found_flag = true;
 //            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
