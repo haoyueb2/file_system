@@ -29,7 +29,8 @@ public class FileController {
 
     public void initialize() {
         nameText.setText(fcb.getName());
-        context.setText(diskManager.read(fcb));
+        //context.setText(diskManager.read(fcb));
+        context.setText(fcb.content);
         //自动换行
         context.setWrapText(true);
         if(fcb.getAuthority() == FCB.Authority.readonly) {
@@ -59,7 +60,14 @@ public class FileController {
         }
         fcb.setName(nameText.getText());
 //        System.out.println(context.getText());
-        diskManager.write(fcb,context.getText());
+        fcb.content = context.getText();
+        //diskManager.write(fcb,context.getText());
+//        String str = context.getText();
+//        if(str.length() <= 1024) {
+//            fcb.setSize(str.length() + "B");
+//        } else if (str.length() > 1024 && str.length() <= 1024 * 1024 ) {
+//            fcb.setSize(str.length() / 1024 + "K");
+//        }
         if(isWritable) {
             fcb.setAuthority(FCB.Authority.writable);
         } else {

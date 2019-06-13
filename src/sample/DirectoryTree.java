@@ -1,20 +1,47 @@
 package sample;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Comparator;
+
 import java.util.Stack;
 
 
-public class DirectoryTree {
+public class DirectoryTree implements Serializable {
 
     //根节点
-    private final static FCB root = new FCB("File System", FCB.Type.folder, null);
+    //private final static FCB root = new FCB("File System", FCB.Type.folder, null);
     //存放结点
-    public static ArrayList<FCB> directoryTree = new ArrayList<FCB>();
+    //public static ArrayList<FCB> directoryTree = new ArrayList<FCB>();
+    private  FCB root = new FCB("File System", FCB.Type.folder, null);
+    public  ArrayList<FCB> directoryTree = new ArrayList<FCB>();
+
+//    static {
+//        directoryTree.add(root);
+//        FCB documentFCB = new FCB("Documents",FCB.Type.folder, root);
+//        directoryTree.add(documentFCB);
+//        FCB imagesFCB = new FCB("Images",FCB.Type.folder, root);
+//        directoryTree.add(imagesFCB);
+//        FCB FCB1 = new FCB("A",FCB.Type.folder, documentFCB);
+//        directoryTree.add(FCB1);
+//        FCB FCB2 = new FCB("B",FCB.Type.folder, documentFCB);
+//        directoryTree.add(FCB2);
+//        FCB FCB3 = new FCB("C",FCB.Type.folder, imagesFCB);
+//        directoryTree.add(FCB3);
+//
+//        FCB FCB4 = new FCB("D",FCB.Type.folder, imagesFCB);
+//        directoryTree.add(FCB4);
+//
+//        directoryTree.add(new FCB("a",FCB.Type.document, documentFCB));
+//        directoryTree.add(new FCB("c",FCB.Type.document, documentFCB));
+//
+//        FCB haha = new FCB("h",FCB.Type.document, imagesFCB);
+//        directoryTree.add(haha);
+//
+//    }
 
 
+    DirectoryTree() {
 
-    static {
         directoryTree.add(root);
         FCB documentFCB = new FCB("Documents",FCB.Type.folder, root);
         directoryTree.add(documentFCB);
@@ -35,11 +62,7 @@ public class DirectoryTree {
 
         FCB haha = new FCB("h",FCB.Type.document, imagesFCB);
         directoryTree.add(haha);
-
     }
-
-
-
     //新建子目录
     public void addFolder(FCB parent, String name) {
         //当前目录有重名的
@@ -112,20 +135,6 @@ public class DirectoryTree {
         return path;
     }
 
-    //获取路径
-    public String getPath2(FCB fcb) {
-        String path = "";
-        FCB current = fcb;
-        path = fcb.getName();
-        if(current != root) {
-            while (current.getParent() != root) {
-                current = current.getParent();
-                path = current.getName() + "." + path;
-            }
-        }
-        return path;
-    }
-
 
     //通过名字找FCB
 
@@ -143,13 +152,11 @@ public class DirectoryTree {
     }
 
 
-    public static FCB getRoot() {
+//    public static FCB getRoot() {
+//        return root;
+//    }
+public  FCB getRoot() {
         return root;
-    }
-
-    public static ArrayList<FCB> getDirectoryTree() {
-        return directoryTree;
-    }
-
+   }
 }
 

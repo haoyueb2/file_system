@@ -3,6 +3,7 @@ package sample;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.StringProperty;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,8 +11,10 @@ import java.util.Arrays;
 import java.util.Date;
 
 
-public class FCB {
+public class FCB implements Serializable {
 
+
+    public String content;
     //文件标识
     private int fileID;
 

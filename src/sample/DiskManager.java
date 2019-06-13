@@ -50,6 +50,8 @@ public class DiskManager {
     //写 ~
     // TODO: 2017/6/20 追加写?
     public void write(FCB fcb, String str) {
+
+
         int occupiedBlockCount =  blockCount(fcb);
 
         //初始化

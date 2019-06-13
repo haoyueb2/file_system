@@ -35,17 +35,17 @@ public class Main extends Application {
             @Override
             public void handle(WindowEvent event) {
                 System.out.print("监听到窗口关闭");
-                //saveObjToFile(SystemController.list);
+                saveObjToFile(SystemController.directoryTree);
             }
         });
 
     }
-    public void saveObjToFile(ObservableList<FCBProperty> list){
+    public void saveObjToFile(DirectoryTree directoryTree){
         try {
             //写对象流的对象
             ObjectOutputStream oos=new ObjectOutputStream(new FileOutputStream("data.dmg"));
 
-            oos.writeObject(list);                 //将Person对象p写入到oos中
+            oos.writeObject(directoryTree);                 //将Person对象p写入到oos中
 
             oos.close();                        //关闭文件流
         } catch (FileNotFoundException e) {

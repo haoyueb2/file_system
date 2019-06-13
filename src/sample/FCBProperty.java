@@ -15,8 +15,10 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+import java.io.Serializable;
 
-public class FCBProperty {
+
+public class FCBProperty{
     private StringProperty name;
     private StringProperty size;
     private StringProperty time;
@@ -93,10 +95,7 @@ public class FCBProperty {
                 SystemController.directoryTree.deleteFile(fcb);
                 SystemController.diskManager.delete(fcb);
 
-//                    System.out.println("aftrer delete:");
-//                    for (int i = 0; i < SystemController.directoryTree.getDirectoryTree().size(); i++) {
-//                        System.out.println(SystemController.directoryTree.getDirectoryTree().get(i).getName());
-//                    }
+
                 SystemController.updateFileList();
 
             } else {
