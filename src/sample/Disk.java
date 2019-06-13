@@ -5,9 +5,6 @@ import java.util.Arrays;
 import java.util.Stack;
 
 
-/**
- * Created by keke on 2017/6/7.
- */
 public class Disk {
     //每个磁盘块大小
     private int diskSize = 256;

@@ -2,9 +2,7 @@ package sample;
 
 import java.util.ArrayList;
 
-/**
- * Created by keke on 2017/6/7.
- */
+
 public class DiskManager {
 
     private Disk disk;
@@ -70,6 +68,7 @@ public class DiskManager {
             fcb.setIndexTableI(i, index);
             if(str.length() - i * diskSize >= diskSize) {
                 disk.getBlockList().set(index, str.substring(i * diskSize, (i + 1) * diskSize - 1));
+
             } else {
                 disk.getBlockList().set(index, str.substring(i * diskSize));
             }

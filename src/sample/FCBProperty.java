@@ -16,9 +16,6 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 
-/**
- * Created by keke on 2017/6/16.
- */
 public class FCBProperty {
     private StringProperty name;
     private StringProperty size;
@@ -48,40 +45,34 @@ public class FCBProperty {
             );
         }
 //        this.choice = false;
-        open.setOnAction(new EventHandler<ActionEvent>() {
+        open.setOnAction(new EventHandler<>() {
             @Override
             public void handle(ActionEvent event) {
 //                System.out.println(fcb.getName());
                 SystemController.currentFCB = fcb;
 //                System.out.println(SystemController.currentFCB.getName());
 //                System.out.println(fcb.getName());
-                if(fcb.getType() == FCB.Type.document) {
+                if (fcb.getType() == FCB.Type.document) {
 //                    System.out.println("doc");
                     try {
-                        if(! DiskManager.openFileTable.contains(fcb)) {
+                        if (!DiskManager.openFileTable.contains(fcb)) {
 //                            System.out.println("!contain");
                             Parent root = FXMLLoader.load(getClass().getResource("file.fxml"));
                             Stage stage = new Stage();
-                            Main.stages.put(fcb,stage);
+                            Main.stages.put(fcb, stage);
                             stage.setTitle("File");
                             stage.setScene(new Scene(root, 800, 500));
                             stage.show();
 
                             DiskManager.openFileTable.add(fcb);
 
-                            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                                @Override
-                                public void handle(WindowEvent event) {
+                            stage.setOnCloseRequest(event1 -> {
 
+                                Main.stages.remove(fcb);
 
-//                                    Main.stages.get(fcb).close();
+                                DiskManager.openFileTable.remove(fcb);
 
-                                    Main.stages.remove(fcb);
-
-                                    DiskManager.openFileTable.remove(fcb);
-
-                                    SystemController.updateFileList();
-                                }
+                                SystemController.updateFileList();
                             });
                         }
 
@@ -96,27 +87,23 @@ public class FCBProperty {
             }
         });
 
-        delete.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                if(fcb.getType() == FCB.Type.document) {
+        delete.setOnAction(event -> {
+            if(fcb.getType() == FCB.Type.document) {
 
-                    SystemController.directoryTree.deleteFile(fcb);
-                    SystemController.diskManager.delete(fcb);
+                SystemController.directoryTree.deleteFile(fcb);
+                SystemController.diskManager.delete(fcb);
 
 //                    System.out.println("aftrer delete:");
 //                    for (int i = 0; i < SystemController.directoryTree.getDirectoryTree().size(); i++) {
 //                        System.out.println(SystemController.directoryTree.getDirectoryTree().get(i).getName());
 //                    }
-                    SystemController.updateFileList();
+                SystemController.updateFileList();
 
-                } else {
-                    SystemController.currentDirectory = fcb.getParent();
-                    SystemController.directoryTree.deleteFolder(fcb);
-                    SystemController.diskManager.delete(fcb);
-                    SystemController.updateFileList();
-                }
-
+            } else {
+                SystemController.currentDirectory = fcb.getParent();
+                SystemController.directoryTree.deleteFolder(fcb);
+                SystemController.diskManager.delete(fcb);
+                SystemController.updateFileList();
             }
 
         });

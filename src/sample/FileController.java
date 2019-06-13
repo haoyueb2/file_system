@@ -13,9 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-/**
- * Created by keke on 2017/6/10.
- */
 public class FileController {
 
     @FXML private TextField nameText;
@@ -28,11 +25,7 @@ public class FileController {
 
     public static ArrayList<Stage> attentionStages = new ArrayList<>();
 
-//    // TODO: 2017/6/21 这两个参数怎么传的?  没有找到很好的方法,用static了
-//    public FileController(FCB fcb, DiskManager diskManager) {
-//        this.fcb = fcb;
-//        this.diskManager = diskManager;
-//    }
+
 
     public void initialize() {
         nameText.setText(fcb.getName());
@@ -84,7 +77,7 @@ public class FileController {
     @FXML
     private void close() {
         Main.stages.get(fcb).close();
-// FIXME: 2017/6/23 
+
         Main.stages.remove(fcb);
 
         DiskManager.openFileTable.remove(fcb);

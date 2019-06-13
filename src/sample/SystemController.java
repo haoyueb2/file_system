@@ -7,19 +7,25 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.stage.WindowEvent;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 
 
 public class SystemController {
 
-
+    @FXML private Pane root;
     @FXML private TreeView<String> treeView;
 
     @FXML private TableView<FCBProperty> tableView;
@@ -35,7 +41,6 @@ public class SystemController {
     private static StringProperty path = new SimpleStringProperty();
 
 
-    public static int selectCount = 0;
 
     //编号
     private int newFileNumber = 0;
@@ -43,7 +48,7 @@ public class SystemController {
 
     public static FCB currentFCB = null;
 
-    private static ObservableList<FCBProperty> list = FXCollections.observableArrayList();
+    public static ObservableList<FCBProperty> list = FXCollections.observableArrayList();
 
     //根目录图标
     private final Node rootIcon = new ImageView(
@@ -68,15 +73,17 @@ public class SystemController {
 
     public void initialize() {
         //change current path
-        path.addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                currentPathText.setText(newValue);
-            }
-        });
+        path.addListener((observable, oldValue, newValue) -> currentPathText.setText(newValue));
 
         initTreeView();
         initTableView();
+//        root.getScene().getWindow().setOnCloseRequest(new EventHandler<WindowEvent>() {
+//            @Override
+//            public void handle(WindowEvent event) {
+//                System.out.print("监听到窗口关闭");
+//                //System.exit(0);
+//            }
+//        });
     }
 
     @FXML
@@ -89,49 +96,8 @@ public class SystemController {
         directoryTree.addFolder(currentDirectory,"new folder " + newFOlderNumber++);
         updateFileList();
     }
-    @FXML
-    private void sortByName() {
-        NameComparator nameComparator = new NameComparator();
-        list.sort(nameComparator);
-    }
-    @FXML
-    private void sortBySize() {
-        SizeComparator sizeComparator = new SizeComparator();
-        list.sort(sizeComparator);
-    }
-
-    @FXML
-    private void sortByModifyTime() {
-        TimeComparator timeComparator = new TimeComparator();
-        list.sort(timeComparator);
-    }
 
 
-    private void addTree(TreeItem<String> parent) {
-        String parentName = parent.getValue();
-        FCB parentFCB = directoryTree.getFCB(parentName);
-        ArrayList<FCB> child = parentFCB.getChild();
-        for (int i = 0; i < child.size(); i++) {
-            FCB current = parentFCB.getChild().get(i);
-            if(current.getType() == FCB.Type.folder) {
-                TreeItem<String> item = new TreeItem<String> (current.getName(), new ImageView(folderImage));
-                parent.getChildren().add(item);
-                item.setExpanded(true);
-            }
-        }
-    }
-    
-    private TreeItem<String> getParentItem(FCB fcb) {
-        FCB parentFCB = fcb.getParent();
-
-        for (int i = 0; i < 10; i++) {
-            if(treeView.getTreeItem(i).getValue() == parentFCB.getName()) {
-                return treeView.getTreeItem(i);
-            }
-
-        }
-        return null;
-    }
 
     public void getAllPath() {
         for (FCB fcb : directoryTree.getDirectoryTree()
@@ -179,24 +145,20 @@ public class SystemController {
         treeView.setRoot(rootItem);
         //监听
         treeView.getSelectionModel().selectedItemProperty().addListener(
-                new ChangeListener<TreeItem <String>>() {
-                    @Override
-                    public void changed(ObservableValue<? extends TreeItem<String>> observableValue,
-                                        TreeItem<String> oldItem, TreeItem<String> newItem) {
-                        //string
-                        String clickedItemName = newItem.getValue();
-                        //index
-                        int clickedItemIndex = treeView.getSelectionModel().getSelectedIndex();
+                (observableValue, oldItem, newItem) -> {
+                    //string
+                    String clickedItemName = newItem.getValue();
+                    //index
+                    int clickedItemIndex = treeView.getSelectionModel().getSelectedIndex();
 
-                        if(clickedItemIndex != 0) {
-                            currentDirectory = directoryTree.getFCB(newItem.getValue(), newItem.getParent().getValue());
+                    if (clickedItemIndex != 0) {
+                        currentDirectory = directoryTree.getFCB(newItem.getValue(), newItem.getParent().getValue());
 //                            System.out.println("currentDirectory:"+currentDirectory.getName());
-                        } else {
-                            currentDirectory = directoryTree.getRoot();
-                        }
-                        updateCurrentPath();
-                        updateFileList();
+                    } else {
+                        currentDirectory = directoryTree.getRoot();
                     }
+                    updateCurrentPath();
+                    updateFileList();
                 });
     }
 
@@ -231,22 +193,7 @@ public class SystemController {
 
 }
 
-//名字比较器
-class NameComparator implements Comparator{
 
-    @Override
-    public int compare(Object o1, Object o2) {
-        String i1 = ((FCBProperty)o1).getName();
-        String i2 = ((FCBProperty)o2).getName();
-        if (i1.compareTo(i2) >=  0){
-            return 1;
-        }
-        if (i1.compareTo(i2) <  0){
-            return -1;
-        }
-        return 0;
-    }
-}
 
 //path比较器
 class PathComparator implements Comparator{
@@ -265,39 +212,6 @@ class PathComparator implements Comparator{
     }
 }
 
-//大小比较器
-class SizeComparator implements Comparator{
-
-    @Override
-    public int compare(Object o1, Object o2) {
-        String i1 = ((FCBProperty)o1).getSize();
-//        String i2 = Integer.valueOf(((FCBProperty)o2).getSize());
-        String i2 = ((FCBProperty)o2).getSize();
-        if (i1.compareTo(i2) >=  0){
-            return 1;
-        }
-        if (i1.compareTo(i2) <  0){
-            return -1;
-        }
-        return 0;
-    }
-}
-
-//时间比较器
-class TimeComparator implements Comparator{
-    @Override
-    public int compare(Object o1, Object o2) {
-        String i1 = ((FCBProperty)o1).getTime();
-        String i2 = ((FCBProperty)o2).getTime();
-        if (i1.compareTo(i2) <  0){
-            return 1;
-        }
-        if (i1.compareTo(i2) >=  0){
-            return -1;
-        }
-        return 0;
-    }
-}
 
 
 

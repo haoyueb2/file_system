@@ -4,15 +4,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Stack;
 
-/**
- * Created by keke on 2017/6/6.
- */
+
 public class DirectoryTree {
 
     //根节点
     private final static FCB root = new FCB("File System", FCB.Type.folder, null);
-    //最大高度
-    private final static int MAX_HEIGHT = 10;
     //存放结点
     public static ArrayList<FCB> directoryTree = new ArrayList<FCB>();
 
@@ -31,6 +27,9 @@ public class DirectoryTree {
         FCB FCB3 = new FCB("C",FCB.Type.folder, imagesFCB);
         directoryTree.add(FCB3);
 
+        FCB FCB4 = new FCB("D",FCB.Type.folder, imagesFCB);
+        directoryTree.add(FCB4);
+
         directoryTree.add(new FCB("a",FCB.Type.document, documentFCB));
         directoryTree.add(new FCB("c",FCB.Type.document, documentFCB));
 
@@ -48,6 +47,7 @@ public class DirectoryTree {
         if(!isSameName(parent,name)) {
             FCB childNode = new FCB(name, FCB.Type.folder, parent);
             directoryTree.add(childNode);
+
         }
     }
 
@@ -83,7 +83,7 @@ public class DirectoryTree {
         for (int i = 0; i < parent.getChild().size(); i++) {
             FCB child = parent.getChild().get(i);
             System.out.println(child.getName());
-            System.out.println("fcb:"+(getFCB(name, parent.getName())).getName());
+            //System.out.println("fcb:"+(getFCB(name, parent.getName())).getName());
 
             if(child.getName().equals(name) && child.getName().equals(getFCB(name, parent.getName()))) {
                 System.out.println(child.getName()+"is same");
@@ -142,14 +142,6 @@ public class DirectoryTree {
         return null;
     }
 
-    public FCB getFCB(String name) {
-        for (int i = 0; i < directoryTree.size(); i++) {
-            if(directoryTree.get(i).getName() == name) {
-                return directoryTree.get(i);
-            }
-        }
-        return null;
-    }
 
     public static FCB getRoot() {
         return root;
@@ -159,9 +151,5 @@ public class DirectoryTree {
         return directoryTree;
     }
 
-    public static void main(String[] args) {
-
-
-    }
 }
 

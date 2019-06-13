@@ -9,9 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
-/**
- * Created by keke on 2017/6/2.
- */
+
 public class FCB {
 
     //文件标识
