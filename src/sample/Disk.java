@@ -19,8 +19,7 @@ public class Disk implements Serializable {
 
     //空块栈
     private  Stack<Integer> freeDiskBlock = new Stack<>();
-    //已使用块栈
-    private  Stack<Integer> fullDiskBlock = new Stack<Integer>();
+
 
     public Disk() {
         this.initStack();
@@ -38,7 +37,6 @@ public class Disk implements Serializable {
     public  int getFreeBlock() {
         if(!freeDiskBlock.empty()) {
             int index = freeDiskBlock.peek();
-            fullDiskBlock.push(index);
             freeDiskBlock.pop();
             return index;
         }
@@ -48,13 +46,7 @@ public class Disk implements Serializable {
     public void releaseBlock(int index) {
         freeDiskBlock.push(index);
         //clear
-
         blockList.set(index, "");
-    }
-    //格式化
-    public void format() {
-        this.initStack();
-        fullDiskBlock.clear();
     }
 
     public ArrayList<String> getBlockList() {
@@ -65,9 +57,6 @@ public class Disk implements Serializable {
         return freeDiskBlock;
     }
 
-    public Stack<Integer> getFullDiskBlock() {
-        return fullDiskBlock;
-    }
 
 //    public int getDiskSize() {
 //        return diskSize;
@@ -85,49 +74,18 @@ public class Disk implements Serializable {
         for (int i = 0; i < 10; i++) {
             System.out.println("index:"+getFreeBlock());
             System.out.println("free:"+freeDiskBlock.peek());
-            System.out.println("full:"+fullDiskBlock.peek());
         }
         for (int i = 0; i < 5; i++) {
             System.out.println("index:"+getFreeBlock());
             System.out.println("free:"+freeDiskBlock.peek());
-            System.out.println("full:"+fullDiskBlock.peek());
         }
 
 
     }
-//    class DiskBlock {
-//
-//        //编号
-//        private int number;
-//        //存储
-//        private String [] content = new String[getDiskSize()];
-//
-//        public DiskBlock(int n) {
-//            this.number = n;
-//        }
-//    }
+
 }
 
 
 
 
 
-//    // 位示图
-//    // 1 : 已占用
-//    // 0 : 可用
-//    private int [] bitmap = new int[diskCount];
-
-//    //找到第一个空位
-//    public int getFisrtEmptyBlock() {
-//        return getNextEmptyBlock(0);
-//    }
-//
-//    //找到下一个空位
-//    public int getNextEmptyBlock(int index) {
-//        for (int i = index; i < diskCount; i++) {
-//            if(bitmap[i] == 0) {
-//                return i;
-//            }
-//        }
-//        return -1;
-//    }

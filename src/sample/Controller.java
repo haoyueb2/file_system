@@ -15,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
 
 
 public class Controller {
@@ -27,13 +28,16 @@ public class Controller {
     public TableColumn<ListItem, String> columnTime;
     public TableColumn<ListItem, Button> columnOpen;
     public TableColumn<ListItem, Button> columnDelete;
+    public TableColumn<ListItem, Button> columnDetail;
     public TextField currentPathText;
     public Button back;
     public Button makeDir;
     public Button makeFile;
+    public Button format;
+    public  Label detail;
 
     private static StringProperty path = new SimpleStringProperty();
-
+    private static StringProperty detailText = new SimpleStringProperty();
 
 
     //编号
@@ -62,7 +66,7 @@ public class Controller {
     public void initialize() {
         //change current path
         path.addListener((observable, oldValue, newValue) -> currentPathText.setText(newValue));
-
+        detailText.addListener((observable, oldValue, newValue) -> detail.setText(newValue));
 
         initTableView();
 //        root.getScene().getWindow().setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -84,12 +88,31 @@ public class Controller {
             disk = tmp2;
             diskManager = new DiskManager(disk);
         }
-// TODO 待加入格式化和文件详细信息
+        //需要格式化
+        format.setOnAction(e-> {
+            //此时不用用for循环，索引会变化会出问题
+            while(directoryTree.getRoot().getChild().size() != 0) {
+                FCB fcb = directoryTree.getRoot().getChild().get(0);
+                if(fcb.getType() == FCB.Type.document) {
+                    Controller.directoryTree.deleteFile(fcb);
+                    Controller.diskManager.delete(fcb);
+                    Controller.updateFileList();
+                } else {
+                    Controller.directoryTree.deleteFolder(fcb);
+                    Controller.diskManager.delete(fcb);
+                    Controller.updateFileList();
+                }
+            }
+
+        });
+
         back.setOnAction(e-> {
-            currentDirectory = currentFCB.getParent();
-            updateCurrentPath();
-            updateFileList();
-            currentFCB = currentFCB.getParent();
+            if(currentFCB!=null) {
+                currentDirectory = currentFCB.getParent();
+                updateCurrentPath();
+                updateFileList();
+                currentFCB = currentFCB.getParent();
+            }
         });
         makeDir.setOnAction(e-> {
             directoryTree.addFolder(currentDirectory,"new folder " + newFOlderNumber++);
@@ -115,7 +138,7 @@ public class Controller {
         columnChoice.setCellValueFactory(cellData -> cellData.getValue().imageViewProperty());
         columnOpen.setCellValueFactory(cellData -> cellData.getValue().openButtonProperty());
         columnDelete.setCellValueFactory(cellData -> cellData.getValue().deleteButtonProperty());
-
+        columnDetail.setCellValueFactory(cellData -> cellData.getValue().detailButtonProperty());
         tableView.setItems(list);
     }
 
@@ -134,6 +157,7 @@ public class Controller {
             list.add(new ListItem(fcb));
 //            System.out.println(fcb.getName());
         }
+        updateDetail("");
     }
     public DirectoryTree getObjFromFile(){
         try {
@@ -173,6 +197,9 @@ public class Controller {
         return null;
     }
 
+    public static void updateDetail(String value) {
+        detailText.setValue(value);
+    }
 }
 
 

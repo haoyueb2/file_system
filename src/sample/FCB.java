@@ -83,7 +83,17 @@ public class FCB implements Serializable {
         //索引表全部项初始化为1
         Arrays.fill(indexTable, -1);
     }
-
+    //文件详情
+    public String displayDetails(FCB fcb) {
+        String details = "";
+        details += "Name : " + fcb.getName() + "\n";
+        details += "Size : " + fcb.getSize() + "\n";
+        details += "Type : " + fcb.getType() + "\n";
+        details += "Authority : " + fcb.getAuthority() + "\n";
+        details += "Create Time : " + fcb.getCreateTime() + "\n";
+        details += "Modify Time : " + fcb.getModifyTime() + "\n";
+        return details;
+    }
 
 
     //添加子目录

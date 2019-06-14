@@ -2,15 +2,13 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 
 <Pane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
@@ -18,24 +16,31 @@
          <items>
             <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0">
               <columns>
-                  <TableColumn fx:id="columnChoice" prefWidth="27.0" />
-                <TableColumn fx:id="columnName" prefWidth="160.0" text="Name" />
-                <TableColumn fx:id="columnSize" prefWidth="55.0" text="Size" />
-                <TableColumn fx:id="columnTime" prefWidth="145.0" text="Modify Time" />
-                  <TableColumn fx:id="columnOpen" />
-                  <TableColumn fx:id="columnDelete" />
+                  <TableColumn fx:id="columnChoice" minWidth="0.0" prefWidth="21.600037336349487" />
+                <TableColumn fx:id="columnName" prefWidth="101.59997181892413" text="文件名" />
+                <TableColumn fx:id="columnSize" prefWidth="85.5999755859375" text="文件大小" />
+                <TableColumn fx:id="columnTime" prefWidth="124.00007629394531" text="修改时间" />
+                  <TableColumn fx:id="columnOpen" prefWidth="77.5999755859375" />
+                  <TableColumn fx:id="columnDelete" prefWidth="60.0" />
+                  <TableColumn fx:id="columnDetail" prefWidth="74.4000244140625" />
               </columns>
             </TableView>
          </items>
       </SplitPane>
 
-      <TextField fx:id="currentPathText" editable="false" layoutX="348.0" layoutY="35.0" prefHeight="27.0" prefWidth="444.0" />
-      <Label layoutX="249.0" layoutY="40.0" text="Current Path : " />
-      <AnchorPane layoutY="62.0" prefHeight="316.0" prefWidth="240.0">
+      <TextField fx:id="currentPathText" editable="false" layoutX="314.0" layoutY="34.0" prefHeight="27.0" prefWidth="444.0" />
+      <Label layoutX="249.0" layoutY="40.0" text="文件路径 : " />
+      <AnchorPane layoutY="62.0" prefHeight="434.0" prefWidth="241.0">
          <children>
-            <Button fx:id="back" layoutX="47.0" layoutY="195.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="116.0" text="返回上一级" />
-            <Button fx:id="makeFile" layoutX="47.0" layoutY="75.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="116.0" text="新建文件" />
-            <Button fx:id="makeDir" layoutX="47.0" layoutY="131.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="116.0" text="新建子目录" />
+            <VBox layoutX="50.0" layoutY="8.0" prefHeight="182.0" prefWidth="139.0" spacing="20.0">
+               <children>
+                  <Button fx:id="back" mnemonicParsing="false" prefHeight="26.0" prefWidth="116.0" text="返回上一级" />
+                  <Button fx:id="makeFile" mnemonicParsing="false" prefHeight="26.0" prefWidth="116.0" text="新建文件" />
+                  <Button fx:id="format" mnemonicParsing="false" prefHeight="27.0" prefWidth="116.0" text="格式化" />
+                  <Button fx:id="makeDir" mnemonicParsing="false" prefHeight="26.0" prefWidth="116.0" text="新建子目录" />
+               </children>
+            </VBox>
+            <Label fx:id="detail" layoutX="14.0" layoutY="190.0" prefHeight="218.0" prefWidth="210.0" />
          </children>
       </AnchorPane>
    </children>

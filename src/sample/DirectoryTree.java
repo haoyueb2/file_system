@@ -8,36 +8,9 @@ import java.util.Stack;
 
 public class DirectoryTree implements Serializable {
 
-    //根节点
-    //private final static FCB root = new FCB("File System", FCB.Type.folder, null);
-    //存放结点
-    //public static ArrayList<FCB> directoryTree = new ArrayList<FCB>();
-    private  FCB root = new FCB("File System", FCB.Type.folder, null);
+    private  FCB root = new FCB("root", FCB.Type.folder, null);
     public  ArrayList<FCB> directoryTree = new ArrayList<FCB>();
 
-//    static {
-//        directoryTree.add(root);
-//        FCB documentFCB = new FCB("Documents",FCB.Type.folder, root);
-//        directoryTree.add(documentFCB);
-//        FCB imagesFCB = new FCB("Images",FCB.Type.folder, root);
-//        directoryTree.add(imagesFCB);
-//        FCB FCB1 = new FCB("A",FCB.Type.folder, documentFCB);
-//        directoryTree.add(FCB1);
-//        FCB FCB2 = new FCB("B",FCB.Type.folder, documentFCB);
-//        directoryTree.add(FCB2);
-//        FCB FCB3 = new FCB("C",FCB.Type.folder, imagesFCB);
-//        directoryTree.add(FCB3);
-//
-//        FCB FCB4 = new FCB("D",FCB.Type.folder, imagesFCB);
-//        directoryTree.add(FCB4);
-//
-//        directoryTree.add(new FCB("a",FCB.Type.document, documentFCB));
-//        directoryTree.add(new FCB("c",FCB.Type.document, documentFCB));
-//
-//        FCB haha = new FCB("h",FCB.Type.document, imagesFCB);
-//        directoryTree.add(haha);
-//
-//    }
 
 
     DirectoryTree() {
@@ -139,23 +112,14 @@ public class DirectoryTree implements Serializable {
     //通过名字找FCB
 
     public FCB getFCB(String name, String parent) {
-
-
-        for (FCB fcb : directoryTree
-             ) {
-
+        for (FCB fcb : directoryTree) {
             if(fcb.getParent()!= null && fcb.getName().equals(name) && fcb.getParent().getName().equals(parent)) {
                 return fcb;
             }
         }
         return null;
     }
-
-
-//    public static FCB getRoot() {
-//        return root;
-//    }
-public  FCB getRoot() {
+    public  FCB getRoot() {
         return root;
    }
 }

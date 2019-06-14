@@ -90,17 +90,7 @@ public class DiskManager {
 
 
 
-    //文件详情
-    public String displayDetails(FCB fcb) {
-        String details = "";
-        details += "Name : " + fcb.getName() + "\n";
-        details += "Size : " + fcb.getSize() + "\n";
-        details += "Type : " + fcb.getType() + "\n";
-        details += "Authority : " + fcb.getAuthority() + "\n";
-        details += "Create Time : " + fcb.getCreateTime() + "\n";
-        details += "Modify Time : " + fcb.getModifyTime() + "\n";
-        return details;
-    }
+
 
 
 }

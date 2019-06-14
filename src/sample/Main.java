@@ -28,13 +28,10 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root, 800, 500));
         primaryStage.show();
 
-        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent event) {
-                System.out.print("监听到窗口关闭");
-                saveObjToFile(Controller.directoryTree);
-                saveDiskToFile(Controller.disk);
-            }
+        primaryStage.setOnCloseRequest(event -> {
+            System.out.print("监听到窗口关闭");
+            saveObjToFile(Controller.directoryTree);
+            saveDiskToFile(Controller.disk);
         });
 
     }

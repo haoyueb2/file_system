@@ -20,10 +20,12 @@ public class ListItem {
 
     private FCB fcb;
     private ObjectProperty<ImageView> imageView;
-    private Button open = new Button("open");
-    private Button delete = new Button("delete");
+    private Button open = new Button("打开");
+    private Button delete = new Button("删除");
+    private Button detail = new Button("详情");
     private ObjectProperty<Button> openButton = new SimpleObjectProperty<Button>(open);
     private ObjectProperty<Button> deleteButton = new SimpleObjectProperty<Button>(delete);
+    private ObjectProperty<Button> detailButton = new SimpleObjectProperty<Button>(detail);
 
 
     public ListItem(FCB fcb) {
@@ -44,21 +46,16 @@ public class ListItem {
         open.setOnAction(new EventHandler<>() {
             @Override
             public void handle(ActionEvent event) {
-//                System.out.println(fcb.getName());
                 Controller.currentFCB = fcb;
-//                System.out.println(Controller.currentFCB.getName());
-//                System.out.println(fcb.getName());
                 if (fcb.getType() == FCB.Type.document) {
-//                    System.out.println("doc");
-                    try {
-                        if (!DiskManager.openFileTable.contains(fcb)) {
-//                            System.out.println("!contain");
-                            Parent root = FXMLLoader.load(getClass().getResource("file.fxml"));
-                            Stage stage = new Stage();
-                            Main.stages.put(fcb, stage);
-                            stage.setTitle("File");
-                            stage.setScene(new Scene(root, 800, 500));
-                            stage.show();
+                                try {
+                                    if (!DiskManager.openFileTable.contains(fcb)) {
+                                        Parent root = FXMLLoader.load(getClass().getResource("file.fxml"));
+                                        Stage stage = new Stage();
+                                        Main.stages.put(fcb, stage);
+                                        stage.setTitle("File");
+                                        stage.setScene(new Scene(root, 800, 500));
+                                        stage.show();
 
                             DiskManager.openFileTable.add(fcb);
 
@@ -85,21 +82,21 @@ public class ListItem {
 
         delete.setOnAction(event -> {
             if(fcb.getType() == FCB.Type.document) {
-
                 Controller.directoryTree.deleteFile(fcb);
                 Controller.diskManager.delete(fcb);
-
-
                 Controller.updateFileList();
 
             } else {
-                Controller.currentDirectory = fcb.getParent();
                 Controller.directoryTree.deleteFolder(fcb);
                 Controller.diskManager.delete(fcb);
                 Controller.updateFileList();
             }
+        });
+        detail.setOnAction(event -> {
+            Controller.updateDetail(fcb.displayDetails(fcb));
 
         });
+
 
     }
 
@@ -173,6 +170,18 @@ public class ListItem {
 
     public void setDeleteButton(Button deleteButton) {
         this.deleteButton.set(deleteButton);
+    }
+
+    public Button getDetailButton() {
+        return deleteButton.get();
+    }
+
+    public ObjectProperty<Button> detailButtonProperty() {
+        return detailButton;
+    }
+
+    public void setDetailButton(Button detailButton) {
+        this.detailButton.set(detailButton);
     }
 
     public FCB getFcb() {
