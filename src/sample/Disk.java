@@ -8,9 +8,9 @@ import java.util.Stack;
 
 public class Disk implements Serializable {
     //每个磁盘块大小
-    private int diskSize = 256;
+    private int diskSize = 512;
     //磁盘块数量
-    public  int diskBlockCount = 100;
+    public  int diskBlockCount = 2000;
     //全部存储
     private  ArrayList<String> blockList = new ArrayList<>();
     //空块栈

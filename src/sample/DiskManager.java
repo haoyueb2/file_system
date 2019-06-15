@@ -8,7 +8,7 @@ public class DiskManager {
     //系统打开文件表
     public static ArrayList<FCB> openFileTable = new ArrayList<>();
     //每个磁盘块大小
-    private int diskSize = 256;
+    private int diskSize = 512;
     public DiskManager(Disk d) {
         this.disk = d;
     }

@@ -24,7 +24,7 @@ public class FCB implements Serializable {
     private String modifyTime;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     //索引表，指向物理地址
-    private int [] indexTable = new int [20];
+    private int [] indexTable = new int [2000];
     private FCB parent;
     private ArrayList<FCB> child = new ArrayList<FCB>();
     public enum Authority {
