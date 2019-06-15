@@ -29,7 +29,6 @@ public class Main extends Application {
         primaryStage.show();
 
         primaryStage.setOnCloseRequest(event -> {
-            System.out.print("监听到窗口关闭");
             saveObjToFile(Controller.directoryTree);
             saveDiskToFile(Controller.disk);
         });

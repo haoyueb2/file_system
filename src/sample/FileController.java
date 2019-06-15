@@ -42,12 +42,12 @@ public class FileController {
         save.setOnAction(e->{
             fcb.setModifyTime();
 
-            if(Controller.directoryTree.isSameName(fcb.getParent(),nameText.getText())) {
+            if(!fcb.getName().equals(nameText.getText()) && Controller.directoryTree.isSameName(fcb.getParent(),nameText.getText())) {
 
                 try {
                     Parent root = FXMLLoader.load(getClass().getResource("alert.fxml"));
                     Stage attentionStage = new Stage();
-                    attentionStage.setTitle("File");
+                    attentionStage.setTitle("警告");
                     attentionStage.setScene(new Scene(root, 300, 200));
                     attentionStages.add(attentionStage);
                     attentionStage.show();
@@ -56,10 +56,10 @@ public class FileController {
                 }
 
             }
-            fcb.setName(nameText.getText());
-//        System.out.println(context.getText());
+            else {
+                fcb.setName(nameText.getText());
 
-            diskManager.write(fcb,context.getText());
+                diskManager.write(fcb, context.getText());
 
 //        fcb.content = context.getText();
 //        String str = context.getText();
@@ -68,10 +68,11 @@ public class FileController {
 //        } else if (str.length() > 1024 && str.length() <= 1024 * 1024 ) {
 //            fcb.setSize(str.length() / 1024 + "K");
 //        }
-            if(isWritable) {
-                fcb.setAuthority(FCB.Authority.writable);
-            } else {
-                fcb.setAuthority(FCB.Authority.readonly);
+                if (isWritable) {
+                    fcb.setAuthority(FCB.Authority.writable);
+                } else {
+                    fcb.setAuthority(FCB.Authority.readonly);
+                }
             }
         });
     }

@@ -12,54 +12,26 @@ import java.util.Date;
 
 
 public class FCB implements Serializable {
-
-
-    public String content;
-    //文件标识
     private int fileID;
-
-    //文件名称
     public String name;
-    //文件大小
     private String size;
-//    //限制大小
-//    private static final int MAX_SIZE = ;
-
-    //文件类型
     public enum Type {
         folder,     //目录文件
         document    //数据文件
     }
     private Type type;
-
-    //权限
+    private String createTime;
+    private String modifyTime;
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    //索引表，指向物理地址
+    private int [] indexTable = new int [20];
+    private FCB parent;
+    private ArrayList<FCB> child = new ArrayList<FCB>();
     public enum Authority {
         readonly, //只读
         writable  //可写
     }
     private Authority authority;
-//    //位置
-//    private ArrayList<String> paths = new ArrayList<String>();
-
-    //创建时间
-    private String createTime;
-    //最近修改时间
-    private String modifyTime;
-
-    // 时间格式
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-    //索引结构
-    private int [] indexTable = new int [20];
-
-//    //文件操作
-//    private FileOperations fileOperations = new FileOperations(this);
-
-    //父目录
-    private FCB parent;
-    //子目录
-    private ArrayList<FCB> child = new ArrayList<FCB>();
-
 
     //构造函数
     public FCB(String name, Type type, FCB parentNode) {
@@ -89,7 +61,6 @@ public class FCB implements Serializable {
         details += "Name : " + fcb.getName() + "\n";
         details += "Size : " + fcb.getSize() + "\n";
         details += "Type : " + fcb.getType() + "\n";
-        details += "Authority : " + fcb.getAuthority() + "\n";
         details += "Create Time : " + fcb.getCreateTime() + "\n";
         details += "Modify Time : " + fcb.getModifyTime() + "\n";
         return details;

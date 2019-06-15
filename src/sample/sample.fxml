@@ -19,10 +19,10 @@
                   <TableColumn fx:id="columnChoice" minWidth="0.0" prefWidth="21.600037336349487" />
                 <TableColumn fx:id="columnName" prefWidth="101.59997181892413" text="文件名" />
                 <TableColumn fx:id="columnSize" prefWidth="85.5999755859375" text="文件大小" />
-                <TableColumn fx:id="columnTime" prefWidth="124.00007629394531" text="修改时间" />
-                  <TableColumn fx:id="columnOpen" prefWidth="77.5999755859375" />
-                  <TableColumn fx:id="columnDelete" prefWidth="60.0" />
-                  <TableColumn fx:id="columnDetail" prefWidth="74.4000244140625" />
+                <TableColumn fx:id="columnTime" minWidth="0.0" prefWidth="0.0" text="修改时间" />
+                  <TableColumn fx:id="columnOpen" prefWidth="107.99995422363281" />
+                  <TableColumn fx:id="columnDelete" prefWidth="123.199951171875" />
+                  <TableColumn fx:id="columnDetail" prefWidth="109.5999755859375" />
               </columns>
             </TableView>
          </items>

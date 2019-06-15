@@ -4,19 +4,14 @@ import java.util.ArrayList;
 
 
 public class DiskManager {
-
     private Disk disk;
-
     //系统打开文件表
     public static ArrayList<FCB> openFileTable = new ArrayList<>();
-
     //每个磁盘块大小
     private int diskSize = 256;
-
     public DiskManager(Disk d) {
         this.disk = d;
     }
-
     //删除
     public void delete(FCB fcb) {
         if(fcb.getType() == FCB.Type.document) {
@@ -30,7 +25,6 @@ public class DiskManager {
             }
         }
     }
-
     //读
     public String read(FCB fcb) {
         int i = 0;
@@ -53,14 +47,10 @@ public class DiskManager {
             disk.releaseBlock(fcb.getIndexTable()[i]);
             fcb.setIndexTableI(i, -1);
         }
-
-
         int needBlock = str.length() / diskSize + 1 ;
-//        for (int i = occupiedBlockCount; i < occupiedBlockCount + needBlock; i++) {
-//            int j = i - occupiedBlockCount;
         for (int i = 0; i < needBlock; i++) {
             int index = disk.getFreeBlock();
-//            System.out.println(index);
+
             fcb.setIndexTableI(i, index);
             if(str.length() - i * diskSize >= diskSize) {
                 disk.getBlockList().set(index, str.substring(i * diskSize, (i + 1) * diskSize - 1));
@@ -68,7 +58,6 @@ public class DiskManager {
             } else {
                 disk.getBlockList().set(index, str.substring(i * diskSize));
             }
-//            fcb.setIndexTableI(i, 1);
         }
         if(str.length() <= 1024) {
             fcb.setSize(str.length() + "B");
@@ -87,10 +76,4 @@ public class DiskManager {
         }
         return count;
     }
-
-
-
-
-
-
 }

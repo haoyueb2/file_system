@@ -7,39 +7,18 @@ import java.util.Stack;
 
 
 public class DirectoryTree implements Serializable {
-
     private  FCB root = new FCB("root", FCB.Type.folder, null);
     public  ArrayList<FCB> directoryTree = new ArrayList<FCB>();
-
-
-
     DirectoryTree() {
-
         directoryTree.add(root);
-        FCB documentFCB = new FCB("Documents",FCB.Type.folder, root);
+        FCB documentFCB = new FCB("example",FCB.Type.folder, root);
         directoryTree.add(documentFCB);
-        FCB imagesFCB = new FCB("Images",FCB.Type.folder, root);
-        directoryTree.add(imagesFCB);
-        FCB FCB1 = new FCB("A",FCB.Type.folder, documentFCB);
+        FCB FCB1 = new FCB("example-1",FCB.Type.folder, documentFCB);
         directoryTree.add(FCB1);
-        FCB FCB2 = new FCB("B",FCB.Type.folder, documentFCB);
-        directoryTree.add(FCB2);
-        FCB FCB3 = new FCB("C",FCB.Type.folder, imagesFCB);
-        directoryTree.add(FCB3);
-
-        FCB FCB4 = new FCB("D",FCB.Type.folder, imagesFCB);
-        directoryTree.add(FCB4);
-
-        directoryTree.add(new FCB("a",FCB.Type.document, documentFCB));
-        directoryTree.add(new FCB("c",FCB.Type.document, documentFCB));
-
-        FCB haha = new FCB("h",FCB.Type.document, imagesFCB);
-        directoryTree.add(haha);
+        directoryTree.add(new FCB("example-doc",FCB.Type.document, documentFCB));
     }
     //新建子目录
     public void addFolder(FCB parent, String name) {
-        //当前目录有重名的
-        //
         if(!isSameName(parent,name)) {
             FCB childNode = new FCB(name, FCB.Type.folder, parent);
             directoryTree.add(childNode);
@@ -80,8 +59,9 @@ public class DirectoryTree implements Serializable {
             FCB child = parent.getChild().get(i);
             System.out.println(child.getName());
             //System.out.println("fcb:"+(getFCB(name, parent.getName())).getName());
+            // && child.getName().equals(getFCB(name, parent.getName()))
 
-            if(child.getName().equals(name) && child.getName().equals(getFCB(name, parent.getName()))) {
+            if(child.getName().equals(name) ) {
                 System.out.println(child.getName()+"is same");
                 return true;
             }

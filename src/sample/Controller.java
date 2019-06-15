@@ -34,7 +34,7 @@ public class Controller {
     public Button makeDir;
     public Button makeFile;
     public Button format;
-    public  Label detail;
+    public Label detail;
 
     private static StringProperty path = new SimpleStringProperty();
     private static StringProperty detailText = new SimpleStringProperty();
@@ -51,8 +51,6 @@ public class Controller {
 
     //目录树
     public static DirectoryTree directoryTree = new DirectoryTree();
-
-
     //当前目录
     public static FCB currentDirectory = directoryTree.getRoot();
 
@@ -103,12 +101,11 @@ public class Controller {
                     Controller.updateFileList();
                 }
             }
-
         });
 
         back.setOnAction(e-> {
-            if(currentFCB!=null) {
-                currentDirectory = currentFCB.getParent();
+            if(!currentDirectory.getName().equals("root")) {
+                currentDirectory = currentDirectory.getParent();
                 updateCurrentPath();
                 updateFileList();
                 currentFCB = currentFCB.getParent();

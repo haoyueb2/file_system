@@ -9,14 +9,10 @@ import java.util.Stack;
 public class Disk implements Serializable {
     //每个磁盘块大小
     private int diskSize = 256;
-
     //磁盘块数量
     public  int diskBlockCount = 100;
-
     //全部存储
     private  ArrayList<String> blockList = new ArrayList<>();
-
-
     //空块栈
     private  Stack<Integer> freeDiskBlock = new Stack<>();
 
@@ -53,33 +49,12 @@ public class Disk implements Serializable {
         return blockList;
     }
 
-    public Stack<Integer> getFreeDiskBlock() {
-        return freeDiskBlock;
-    }
-
-
-//    public int getDiskSize() {
-//        return diskSize;
-//    }
     public int getDiskSize() {
         return diskSize;
     }
 
     public  void main(String[] args) {
         initStack();
-//        while(!freeDiskBlock.empty()) {
-//            System.out.println(freeDiskBlock.peek());
-//            freeDiskBlock.pop();
-//        }
-        for (int i = 0; i < 10; i++) {
-            System.out.println("index:"+getFreeBlock());
-            System.out.println("free:"+freeDiskBlock.peek());
-        }
-        for (int i = 0; i < 5; i++) {
-            System.out.println("index:"+getFreeBlock());
-            System.out.println("free:"+freeDiskBlock.peek());
-        }
-
 
     }
 
