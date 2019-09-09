@@ -111,7 +111,7 @@ Disk和Directory为记录文件信息的主要类，Controller里有它们的静
 
 ### 新建
 
-![1560606395572](E:\2019spring\os\os_project3\File-System\image\1560606395572.png)
+![1560606395572](./image/1560606395572.png)
 
 主界面如图，此界面的fxml文件为sample.fxml,控制器为Controller
 
@@ -153,7 +153,7 @@ Disk和Directory为记录文件信息的主要类，Controller里有它们的静
 
 
 
-![1560606722397](E:\2019spring\os\os_project3\File-System\image\1560606722397.png)
+![1560606722397](./image/1560606722397.png)
 
 如果是文件点击打开，则会加载新的场景，此场景的fxml文件为file.fxml，控制器为FIleController。（也会将对应文件的fcb加入文件打开表中）
 
@@ -168,35 +168,35 @@ stage.show();
 
 
 
-![1560606826120](E:\2019spring\os\os_project3\File-System\image\1560606826120.png)
+![1560606826120](./image/1560606826120.png)
 
 点击保存会调用diskManager的write函数，将文件内容写入disk里。fcb里的indexTable会存储记录文件信息的相应disk的blockLisk里的索引。
 
 如图为一个81K的文件的fcb的indexTable示意（指向存储文件的模拟的物理地址）：
 
-![1561166635270](E:\2019spring\os\os_project3\File-System\image\1561166635270.png)
+![1561166635270](./image/1561166635270.png)
 
 ...中间过长无法全部展示，结尾如图：
 
-![1561166720033](E:\2019spring\os\os_project3\File-System\image\1561166720033.png)
+![1561166720033](./image/1561166720033.png)
 
 如图。共用了164个块。每个块大小为512，计算得与文件大小相符。
 
 此时的Disk文件可以看到空闲块剩下1836块，等于2000-164
 
-![1561166997221](E:\2019spring\os\os_project3\File-System\image\1561166997221.png)
+![1561166997221](./image/1561166997221.png)
 
 Disk中的实际模拟磁盘的存储变量blockLisk的状态如图，indexTable存储的即是对应信息在blockLisk的索引：
 
-![1561167058979](E:\2019spring\os\os_project3\File-System\image\1561167058979.png)
+![1561167058979](./image/1561167058979.png)
 
-![1561167084184](E:\2019spring\os\os_project3\File-System\image\1561167084184.png)
+![1561167084184](./image/1561167084184.png)
 
 
 
 在这个页面可以对文件重命名，但是如果同级目录下有同名文件就无法命名，比如以下为新建一个名字为”第一个文件“的文件：
 
-![1560607949917](E:\2019spring\os\os_project3\File-System\image\1560607949917.png)
+![1560607949917](./image/1560607949917.png)
 
 ### 删除
 
@@ -221,7 +221,7 @@ Disk中的实际模拟磁盘的存储变量blockLisk的状态如图，indexTable
 
 点击详情，会在左下角显示文件的一些详细信息
 
-![1560607332586](E:\2019spring\os\os_project3\File-System\image\1560607332586.png)
+![1560607332586](./image/1560607332586.png)
 
 由于UI的控制是在Controller类里，而列表的每一项是在ListItem类里，UI的Label组件无法声明为static，所以在其他类里不能直接通过Controller.label获得UI对象。故只能通过在Controller里声明static的stringproperty变量，这些变量通过addListener绑定UI对象实现监听机制，这样在其他类里就可以通过更新stringProperty类型的变量更新UI组件。这里介绍主要是因为这是本项目里多处使用到的UI通信机制。
 
