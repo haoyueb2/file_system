@@ -4,13 +4,13 @@ typora-copy-images-to: image
 
 # 文件管理系统模拟
 
-**1652613白皓月**
+
 
 开发语言为java，界面基于javafx构建
 
 如果打开可执行文件报错，可能是版本问题，本项目开发过程中使用jdk和jre版本:
 
-![1560077255390](C:\Users\74293\AppData\Roaming\Typora\typora-user-images\1560077255390.png)
+![1560077255390](./image/1560077255390.png)
 
 ## 项目背景
 
@@ -50,7 +50,7 @@ public class FCB implements Serializable {
     private String modifyTime;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     //索引表，指向物理地址
-    private int [] indexTable = new int [1000];
+    private int [] indexTable = new int [2000];
     private FCB parent;
     private ArrayList<FCB> child = new ArrayList<FCB>();
     public enum Authority {
@@ -69,7 +69,7 @@ public class Disk implements Serializable {
     //每个磁盘块大小
     private int diskSize = 512;
     //磁盘块数量
-    public  int diskBlockCount = 1000;
+    public  int diskBlockCount = 2000;
     //全部存储
     private  ArrayList<String> blockList = new ArrayList<>();
     //空块栈
@@ -78,7 +78,7 @@ public class Disk implements Serializable {
 }
 ```
 
-从Disk我们可以看出，目前暂定支持最大为500K的文件的存储。
+从Disk我们可以看出，目前暂定支持最大为1000K的文件的存储。
 
 DirectoryTree为目录树，存储着所有FCB的信息以及它们的关系，根节点为root。
 
@@ -141,17 +141,58 @@ Disk和Directory为记录文件信息的主要类，Controller里有它们的静
 
 ### 打开
 
-列表里每一个文件都有对应的打开，删除，和详情。
+列表里每一个文件都有对应的打开，删除，和详情。对应的回调函数在ListItem文件里实现
 
 如果是文件夹点击打开会调用updateCurrentPath()和updateFileList()刷新列表和当前路径。
 
+```java
+                    Controller.currentDirectory = fcb;
+                    Controller.updateCurrentPath();
+                    Controller.updateFileList();
+```
+
+
+
 ![1560606722397](E:\2019spring\os\os_project3\File-System\image\1560606722397.png)
 
-如果是文件点击打开，则会加载新的场景，此场景的fxml文件为file.fxml，控制器为FIleController
+如果是文件点击打开，则会加载新的场景，此场景的fxml文件为file.fxml，控制器为FIleController。（也会将对应文件的fcb加入文件打开表中）
+
+```java
+Parent root = FXMLLoader.load(getClass().getResource("file.fxml"));
+Stage stage = new Stage();
+Main.stages.put(fcb, stage);
+stage.setTitle("File");
+stage.setScene(new Scene(root, 800, 500));
+stage.show();
+```
+
+
 
 ![1560606826120](E:\2019spring\os\os_project3\File-System\image\1560606826120.png)
 
 点击保存会调用diskManager的write函数，将文件内容写入disk里。fcb里的indexTable会存储记录文件信息的相应disk的blockLisk里的索引。
+
+如图为一个81K的文件的fcb的indexTable示意（指向存储文件的模拟的物理地址）：
+
+![1561166635270](E:\2019spring\os\os_project3\File-System\image\1561166635270.png)
+
+...中间过长无法全部展示，结尾如图：
+
+![1561166720033](E:\2019spring\os\os_project3\File-System\image\1561166720033.png)
+
+如图。共用了164个块。每个块大小为512，计算得与文件大小相符。
+
+此时的Disk文件可以看到空闲块剩下1836块，等于2000-164
+
+![1561166997221](E:\2019spring\os\os_project3\File-System\image\1561166997221.png)
+
+Disk中的实际模拟磁盘的存储变量blockLisk的状态如图，indexTable存储的即是对应信息在blockLisk的索引：
+
+![1561167058979](E:\2019spring\os\os_project3\File-System\image\1561167058979.png)
+
+![1561167084184](E:\2019spring\os\os_project3\File-System\image\1561167084184.png)
+
+
 
 在这个页面可以对文件重命名，但是如果同级目录下有同名文件就无法命名，比如以下为新建一个名字为”第一个文件“的文件：
 
@@ -184,9 +225,40 @@ Disk和Directory为记录文件信息的主要类，Controller里有它们的静
 
 由于UI的控制是在Controller类里，而列表的每一项是在ListItem类里，UI的Label组件无法声明为static，所以在其他类里不能直接通过Controller.label获得UI对象。故只能通过在Controller里声明static的stringproperty变量，这些变量通过addListener绑定UI对象实现监听机制，这样在其他类里就可以通过更新stringProperty类型的变量更新UI组件。这里介绍主要是因为这是本项目里多处使用到的UI通信机制。
 
+Listitem类里：
+
+```java
+        detail.setOnAction(event -> {
+            Controller.updateDetail(fcb.displayDetails(fcb));
+        });
+```
+
+Controller类里：
+
+```java
+    public static void updateDetail(String value) {
+        detailText.setValue(value);
+    }
+```
+
+
+
 ### 返回上一级
 
 返回上一级与文件夹的打开实现方式类似，都是更新currentDirectory后调用              updateCurrentPath()和updateFileList()函数。不过会先判断当前路径是否为根路径。
+
+```java
+        back.setOnAction(e-> {
+            if(!currentDirectory.getName().equals("root")) {
+                currentDirectory = currentDirectory.getParent();
+                updateCurrentPath();
+                updateFileList();
+                currentFCB = currentFCB.getParent();
+            }
+        });
+```
+
+
 
 ### 格式化
 

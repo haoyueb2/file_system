@@ -33,7 +33,7 @@ public class ListItem {
         this.name = new SimpleStringProperty(fcb.getName());
         this.size = new SimpleStringProperty(fcb.getSize());
         this.time = new SimpleStringProperty(fcb.getModifyTime());
-        if(fcb.getType() == FCB.Type.document) {
+        if (fcb.getType() == FCB.Type.document) {
             imageView = new SimpleObjectProperty<ImageView>(
                     new ImageView(new Image(getClass().getResourceAsStream("/images/file.png")))
             );
@@ -48,14 +48,14 @@ public class ListItem {
             public void handle(ActionEvent event) {
                 Controller.currentFCB = fcb;
                 if (fcb.getType() == FCB.Type.document) {
-                                try {
-                                    if (!DiskManager.openFileTable.contains(fcb)) {
-                                        Parent root = FXMLLoader.load(getClass().getResource("file.fxml"));
-                                        Stage stage = new Stage();
-                                        Main.stages.put(fcb, stage);
-                                        stage.setTitle("File");
-                                        stage.setScene(new Scene(root, 800, 500));
-                                        stage.show();
+                    try {
+                        if (!DiskManager.openFileTable.contains(fcb)) {
+                            Parent root = FXMLLoader.load(getClass().getResource("file.fxml"));
+                            Stage stage = new Stage();
+                            Main.stages.put(fcb, stage);
+                            stage.setTitle("File");
+                            stage.setScene(new Scene(root, 800, 500));
+                            stage.show();
 
                             DiskManager.openFileTable.add(fcb);
 
@@ -81,7 +81,7 @@ public class ListItem {
         });
 
         delete.setOnAction(event -> {
-            if(fcb.getType() == FCB.Type.document) {
+            if (fcb.getType() == FCB.Type.document) {
                 Controller.directoryTree.deleteFile(fcb);
                 Controller.diskManager.delete(fcb);
                 Controller.updateFileList();
@@ -94,7 +94,6 @@ public class ListItem {
         });
         detail.setOnAction(event -> {
             Controller.updateDetail(fcb.displayDetails(fcb));
-
         });
 
 
